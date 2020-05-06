@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./Css/style.css">
+    <title>TODO List</title>
+</head>
+<body>
+    <main id="contenido-principal">
+        <h1>Agrega una tarea</h1>
+
+        <section id="agregar-tarea">
+            <form action="/nueva-tarea" method="POST" id="formulario">
+                <input type="text" name="nombre" id="nombre-tarea" placeholder="Nombre de la tarea">
+                <input type="text" name="contenido" id="contenido-tarea" placeholder="Contenido">
+                <input type="submit" id="boton-agregar" value="Agregar">
+            </form>
+        </section>
+
+        <hr>
+
+        <h1>Tareas</h1>
+
+        <section id="tareas">
+
+            <!-- <div class="tarea">
+                <h2>Titulo tarea 1</h2>
+                <article>
+                    <p>Contenido de la tarea</p>
+                    <input class="boton-borrar" type="button" value="Borrar">
+                </article>
+            </div> -->
+
+        </section>
+    </main>
+
+    <section id="pop-up">
+        <p id="texto-pop-up"></p>
+        <button id="cerrar-pop-up">Cerrar</button>
+    </section>
+
+    <script src="./Js/index.js"></script>
+</body>
+</html>
