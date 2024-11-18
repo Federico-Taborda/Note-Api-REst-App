@@ -4,7 +4,7 @@ let contenidoTarea = document.getElementById("contenido-tarea");
 let agregar = document.getElementById("boton-agregar");
 
 // Carga las tareas al abrir la pagina
-cargarTareas();
+//cargarTareas();
 
 // Se inicia al agregar una tarea
 agregar.addEventListener("click", () => {
