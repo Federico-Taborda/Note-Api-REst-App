@@ -11,11 +11,6 @@ body {
     justify-content: center;
 }
 
-button:hover {
-    transition: 0.7s;
-    cursor: pointer;
-}
-
 input {
     border: none;
     outline: none;
@@ -61,11 +56,15 @@ h1 {
 #boton-agregar {
     background-color: #21cc71;
     border: none;
+    padding: 10px;
+    border-radius: 4px;
 }
 
 #boton-agregar:hover {
     background-color: #27ae60;
     color: #fff;
+    transition: 0.7s;
+    cursor: pointer;
 }
 
 #advertencia {
