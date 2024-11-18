@@ -7,12 +7,24 @@ let agregar = document.getElementById("boton-agregar");
 //cargarTareas();
 
 // Se inicia al agregar una tarea
-agregar.addEventListener("click", () => {
-    if(tituloTarea.value == "" || contenidoTarea.value == "") {
-        pop_Up("#e74c3c", "ADVERTENCIA: Completa los campos");
-    }else{
-        pop_Up("#21cc71", "Tarea agregada");    
-    };
+agregar.addEventListener("click", (e) => {
+    e.preventDefault(); // Previene que el navegador redireccione
+
+    if(tituloTarea.value == "" || contenidoTarea.value == "") 
+        notificacion("error", "Los campos no pueden estar vacios");
+
+    const nombre = document.getElementById("nombre-tarea").value;
+    const contenido = document.getElementById("contenido-tarea").value;
+
+    // Crea una tarea
+    fetch("/todos/nueva-tarea", {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({nombre: nombre, contenido: contenido})
+    })
+    .then(() => notificacion("sucess", "Tarea agregada"))
+    .then(() => cargarTareas())
+    .catch((err) => console.log("Error ", err))   
 });
 
 function agregarTarea(titulo, contenido) {
@@ -27,14 +39,17 @@ function agregarTarea(titulo, contenido) {
     </div>`;
 };
 
-// POP-UP
-function pop_Up(color, text) {
+// Notificacion
+function notificacion(state, text) {
+    let colors = { succes: "#e74c3c", error: "#21cc71" };
     let popUp = document.getElementById("pop-up");
     let advertencia = document.getElementById("texto-pop-up");
     let cerrarPopUp = document.getElementById("cerrar-pop-up");
-    
-    popUp.style.display = "initial";
-    popUp.style.backgroundColor = color;
+
+    if(state == "succes") popUp.style.backgroundColor = colors.succes;
+    if(state == "error") popUp.style.backgroundColor = colors.error;
+
+    popUp.style.display = "initial";    
     advertencia.innerHTML = text;
 
     cerrarPopUp.addEventListener("click", () => {
@@ -63,14 +78,14 @@ function borrarTarea() {
 
 // Borrar tarea de la DB
 function borrarTareaDB(title) {
-    fetch(`/delete/${title}`)
-        .then(() => pop_Up("#21cc71", "Tarea borrada"));
+    fetch(`/todos/delete/${title}`)
+        .then(() => notificacion("succes", "Tarea borrada"));
 }; 
 
 // Cargar tareas en el DOM
 function cargarTareas() {
     document.getElementById("tareas").innerHTML = "";
-    fetch("/tareas", {method: "GET"})
+    fetch("/todos/tareas", {method: "GET"})
         .then(res => res.json())
         .then(json => {
             json.data.map((tarea) => {
@@ -81,19 +96,3 @@ function cargarTareas() {
             borrarTarea();
         });
 };
-
-// Prevenir redireccionamiento
-document.getElementById("formulario").addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    const nombre = document.getElementById("nombre-tarea").value;
-    const contenido = document.getElementById("contenido-tarea").value;
-
-    fetch("/nueva-tarea", {
-        method: "POST",
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({nombre: nombre, contenido: contenido})
-    })
-    .then(() => cargarTareas())
-    .catch((err) => console.log("Error ", err))
-});
