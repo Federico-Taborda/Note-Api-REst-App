@@ -1,3 +1,3 @@
-# TODO List
+# Lista de tareas con Node, Express y SQLite.
 
-TODO List con Node, Express y SQLite3.
+Aplicacion basica de ejercicio
