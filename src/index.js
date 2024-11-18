@@ -1,15 +1,22 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const db = require("./database");
+import express from "express";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+// Arregla el uso de __dirname con ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Inicializando express
 const app = express();
-const port = 3000;
+const PORT = 3000;
 
-// Parseando body y sirviendo archivos estaticos
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.static("./public"));
+// Sirviendo archivos estaticos
+app.use("/", express.static(path.join(__dirname, 'public')));
+
+
+//app.use('/api/todos', todosRouter);
+
+//app.use('/api/users', usersRouter);
 
 // GET
 app.get("/", (req, res) => {
@@ -18,39 +25,24 @@ app.get("/", (req, res) => {
 });
 
 app.get("/tareas", (req, res) => {
-    let sql = "SELECT * FROM tareas";
-    let params = [];
-    db.all(sql, params, (err, rows) => {
-        if(err) res.status(400).json({"error": err.message});
-        
-        res.json({"message": "succes", "data": rows});
-    });
+    //let sql = "SELECT * FROM tareas";
+    res.json({"message": "tareas"});
 });
 
 // POST
 app.post("/nueva-tarea", (req, res) => {
-    // console.log(req.body.nombre, req.body.contenido);
-
     if(req.body.nombre != "" && req.body.contenido != "") {
-        let sql = `INSERT INTO tareas(title, content)VALUES(?,?)`;
-        db.run(sql, [req.body.nombre, req.body.contenido], (err) => {
-            if(err) console.log(err.message);
-            console.log("Se ha insertado una tabla");
-        });
+        //let sql = `INSERT INTO tareas(title, content)VALUES(?,?)`;
         res.end();
     };
 });
 
 // DELETE
 app.get("/delete/:title", (req, res) => {
-    let sql = `DELETE FROM tareas WHERE title = ?`;
-    db.run(sql, req.params.title, (err) => {
-        if(err) res.status(400).json({"error": err.message});
-        res.json({"message": "deleted"});
-    });
+    //let sql = `DELETE FROM tareas WHERE title = ?`;
+    if(err) res.status(400).json({"error": err.message});
+    res.json({"message": "deleted"});
 });
 
 // Iniciando servidor
-app.listen(port, () => {
-    console.log(`Servidor en el puerto ${port}`);
-});
+app.listen(PORT, () => console.log(`Servidor en el puerto ${PORT}`)); 
