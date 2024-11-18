@@ -2,27 +2,27 @@ import database from "./model.js";
 
 // Querys para crear, obtener, actualizar y eliminar tareas
 
-const createTodo = database.prepare(`
-    INSERT INTO todos (todo_id, title, created_at)    
-    VALUES (?,?,?)
-    RETURNING todo_id, title, created_at
+const crearTarea = database.prepare(`
+    INSERT INTO tareas (id_tarea, titulo, contenido, fecha)    
+    VALUES (?,?,?,?)
+    RETURNING id_tarea, titulo, contenido, fecha
 `);
 
-const getTodos = database.prepare(`
-    SELECT * FROM todos
+const obtenerTareas = database.prepare(`
+    SELECT * FROM tareas
 `);
 
-const getTodoById = database.prepare(`
-    SELECT * FROM todos WHERE todo_id = ?
+const obtenerTareaPorId = database.prepare(`
+    SELECT * FROM tareas WHERE id_tarea = ?
 `);
 
-const deleteTodo = database.prepare(`
-    DELETE from todos WHERE todo_id = ?
+const borrarTarea = database.prepare(`
+    DELETE from tareas WHERE id_tarea = ?
 `);
 
 export {
-    createTodo,
-    getTodos,
-    getTodoById,
-    deleteTodo
+    crearTarea,
+    obtenerTareas,
+    obtenerTareaPorId,
+    borrarTarea
 }

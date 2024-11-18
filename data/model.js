@@ -5,10 +5,11 @@ const database = new DatabaseSync(`${import.meta.dirname}/main.db`);
 
 // Query que inicializa la base de datos
 const initDatabase = `
-CREATE TABLE IF NOT EXISTS todos (
-    todo_id TEXT PRIMARY KEY,
-    title TEXT NOT NULL,
-    created_at INTEGER NOT NULL,
+CREATE TABLE IF NOT EXISTS tareas (
+    id_tarea TEXT PRIMARY KEY,
+    titulo TEXT NOT NULL,
+    contenido TEXT NOT NULL,
+    fecha INTEGER NOT NULL
 );
 `;
 
