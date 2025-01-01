@@ -13,6 +13,7 @@ A basic notes management application built with Node.js, Express, PostgreSQL, an
 ## Project Setup  
 
 1. Clone the repository:  
+
    ```bash
    git clone <repository-url>
    cd <project-directory>
@@ -20,8 +21,8 @@ A basic notes management application built with Node.js, Express, PostgreSQL, an
 
 2. Install dependencies with `npm install`
 
-# Run the proyect
+3. For run the app just use the command: `npm run start`.
 
-For run the app just use the command: `npm run start`.
+# Develop
 
 For run the app in mode development use the command: `npm run dev`.
