@@ -1,5 +1,14 @@
 const PORT = process.env.PORT || 3000;
 
-export default {
-    PORT
+const DATABASE_NAME = process.env.DATABASE_NAME;
+const DATABASE_USERNAME = process.env.DATABASE_USERNAME;
+const DATABASE_PASSWORD = process.env.DATABASE_PASSWORD;
+const DATABASE_HOST = process.env.DATABASE_HOST;
+
+export {
+    PORT,
+    DATABASE_NAME,
+    DATABASE_USERNAME,
+    DATABASE_PASSWORD,
+    DATABASE_HOST
 }
