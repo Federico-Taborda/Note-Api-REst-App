@@ -1,14 +1,41 @@
-import express from "express";
+import app from './app.js';
 import { PORT } from './config.js';
-import todosRouter from './routes/todos.routes.js';
+import { sequelize } from './database/connection.js';
+import setupAssociations from './models/associations.js';
 
-// Inicializando express
-const app = express();
+// Load Models
+import './models/noteModel.js';
+import './models/userModel.js';
 
-// Middleware para procesar cuerpos JSON
-app.use(express.json());
+const testDatabaseConnection = async () => {
+    try {
+        await sequelize.authenticate();
+        
+        console.log(`Connection to database has been established successfully.`);
+    } catch (error) {
+        console.error('Unable to connect to the database:', error);
+    }
+}
 
-app.use('/todos', todosRouter);
+const syncronizeDatabase = async () => {
+    try {
+        setupAssociations();
+        await sequelize.sync({ alter: true });
+        console.log('Database synchronized successfully.');
+    } catch (error) {
+        console.error('Unable to synchronize the database:', error);
+    }
+}
 
-// Iniciando servidor
-app.listen(PORT, () => console.log(`Servidor en el puerto ${PORT}`)); 
+const runServer = async () => {
+    try {
+        await testDatabaseConnection();
+        await syncronizeDatabase();
+        
+        app.listen(PORT, () => console.log(`Server running in port: ${PORT}`));
+    } catch (error) {
+        console.log('Error to run server:', error);
+    }
+};
+
+runServer();
