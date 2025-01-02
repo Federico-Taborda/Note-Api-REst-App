@@ -1,4 +1,4 @@
-# Note Api-REst App
+# Note Api-Rest App
 
 A basic notes management application built with Node.js, Express, PostgreSQL, and Sequelize.
 
