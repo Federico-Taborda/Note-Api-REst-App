@@ -26,7 +26,7 @@ class UserController {
     static async getAllUsers(req, res) {
         try {
             const users = await UserService.getAllUsers();
-            
+
             if(!users) {
                 return res.status(404).send({
                     "success": false,
@@ -65,6 +65,28 @@ class UserController {
             res.status(error?.statusCode || 500).send({ message: error?.message || error });
         }
     }
+
+    static async getUserByName(req, res) {
+        try {
+            const name = req.params.userName;
+            const user = await UserService.getUserByName(name);
+
+            if(!user) {
+                return res.status(404).send({
+                    "success": false,
+                    "message": "User not found"
+                });
+            }
+
+            res.status(302).send({
+                "success": true,
+                "message": "User retrieved successfully",
+                "data": user
+            });
+        } catch (error) {
+            res.status(error?.statusCode || 500).send({ message: error?.message || error });
+        }
+    }    
 }
 
 export default UserController;

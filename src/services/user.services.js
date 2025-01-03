@@ -21,6 +21,15 @@ class UserService {
         }
     }
 
+    static async getUserByName(username) {
+        try {
+            const user = await User.findOne({ where: { username } });
+            return user;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     static async getUserById(id) {
         try {
             const user = await User.findByPk(id);
