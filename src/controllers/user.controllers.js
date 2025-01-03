@@ -86,7 +86,29 @@ class UserController {
         } catch (error) {
             res.status(error?.statusCode || 500).send({ message: error?.message || error });
         }
-    }    
+    }
+
+    static async getUserByEmail(req, res) {
+        try {
+            const email = req.params.email;
+            const user = await UserService.getUserByEmail(email);
+
+            if(!user) {
+                return res.status(404).send({
+                    "success": false,
+                    "message": "User not found"
+                });
+            }
+
+            res.status(302).send({
+                "success": true,
+                "message": "User retrieved successfully",
+                "data": user
+            });
+        } catch (error) {
+            res.status(error?.statusCode || 500).send({ message: error?.message || error });
+        }
+    }   
 }
 
 export default UserController;
