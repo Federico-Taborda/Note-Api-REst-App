@@ -3,19 +3,17 @@ import User from '../models/userModel.js';
 class UserService {
     static async createUser(user) {
         try {
-            const newUser = await User.create(user);
-            return newUser;
+            return await User.create(user);
         } catch (error) {
             if (error.name === 'SequelizeUniqueConstraintError') {
-                console.log('Error: El usuario ya existe.');
+                console.log('Error: User has already been created.');
             }
         }
     }
 
     static async getAllUsers() {
         try {
-            const users = await User.findAll();
-            return users;
+            return await User.findAll();
         } catch (error) {
             throw error;
         }
@@ -23,8 +21,7 @@ class UserService {
 
     static async getUserById(id) {
         try {
-            const user = await User.findByPk(id);
-            return user;
+            return await User.findByPk(id);
         }catch (error) {
             throw error;
         }
@@ -32,8 +29,7 @@ class UserService {
 
     static async getUserByName(username) {
         try {
-            const user = await User.findOne({ where: { username } });
-            return user;
+            return await User.findOne({ where: { username } });
         } catch (error) {
             throw error;
         }
@@ -41,8 +37,7 @@ class UserService {
     
     static async getUserByEmail(email) {
         try {
-            const user = await User.findOne({ where: { email } });
-            return user;
+            return await User.findOne({ where: { email } });
         } catch (error) {
             throw error;
         }
