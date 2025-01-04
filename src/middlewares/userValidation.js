@@ -4,7 +4,7 @@ const userValidationSchema = checkSchema({
     username: {
         in: ['body'],
         isString: true,
-        notEmtpy: {
+        notEmpty: {
             errorMessage: 'User cannot be empty'
         },
         isLength: {
@@ -15,14 +15,14 @@ const userValidationSchema = checkSchema({
     email: {
         in: ['body'],
         isEmail: true,
-        notEmtpy: {
+        notEmpty: {
             errorMessage: 'Email cannot be empty'
         },
     },
     role: {
         in: ['body'],
         isString: true,
-        notEmtpy: {
+        notEmpty: {
             errorMessage: 'Role cannot be empty'
         },
     }
