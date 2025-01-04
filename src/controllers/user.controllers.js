@@ -9,7 +9,7 @@ class UserController {
             if(!newUser) {
                 return res.status(400).send({
                     "success": false,
-                    "message": "User not created"
+                    "message": "User has already been created"
                 });
             }
 
@@ -52,7 +52,7 @@ class UserController {
             if(!user) {
                 return res.status(404).send({
                     "success": false,
-                    "message": "User not found"
+                    "message": `User with id: ${id} not found`
                 });
             }
 
@@ -74,7 +74,7 @@ class UserController {
             if(!user) {
                 return res.status(404).send({
                     "success": false,
-                    "message": "User not found"
+                    "message": `User with name: ${name} not found`,
                 });
             }
 
@@ -96,19 +96,41 @@ class UserController {
             if(!user) {
                 return res.status(404).send({
                     "success": false,
-                    "message": "User not found"
+                    "message": `User with email: ${email} not found`
                 });
             }
 
             res.status(302).send({
                 "success": true,
-                "message": "User retrieved successfully",
+                "message": "User retrieved successfully ",
                 "data": user
             });
         } catch (error) {
             res.status(error?.statusCode || 500).send({ message: error?.message || error });
         }
-    }   
+    }
+
+    static async getUsersByRole(req, res) {
+        try {
+            const userRole = req.params.role;
+            const users = await UserService.getUsersByRole(userRole);
+
+            if(!users) {
+                return res.status(404).send({
+                    "success": false,
+                    "message": `No users found with the specified role: ${userRole}`
+                });
+            }
+
+            res.status(302).send({
+                "success": true,
+                "message": "Users retrieved successfully",
+                "data": users
+            });
+        } catch (error) {
+            res.status(error?.statusCode || 500).send({ message: error?.message || error });
+        }
+    }
 }
 
 export default UserController;

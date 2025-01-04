@@ -41,7 +41,15 @@ class UserService {
         } catch (error) {
             throw error;
         }
-    }   
+    }
+
+    static async getUsersByRole(userRole) {
+        try {
+            return await User.findAll({ where: { role: userRole } });
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 export default UserService;

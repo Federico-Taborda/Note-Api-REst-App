@@ -14,6 +14,8 @@ userRouter.get('/name/:userName', UserController.getUserByName);
 
 userRouter.get('/email/:email', UserController.getUserByEmail);
 
+userRouter.get('/role/:role', UserController.getUsersByRole);
+
 // POST Method
 userRouter.post('/', userValidationSchema, handleValidation, UserController.createUser);
 
