@@ -172,6 +172,32 @@ class UserController {
             res.status(error?.statusCode || 500).send({ message: error?.message || error });
         }
     }
+
+    static async updateUserEmail(req, res) {
+        try {
+            const { userName, email } = req.body;
+            const user = await UserService.getUserByName(userName);
+
+            if(!user) {
+                return res.status(404).send({
+                    "success": false,
+                    "message": `User with name: ${userName} not found`
+                });
+            }
+
+            await UserService.updateUserEmail(user.id, email);
+            user.email = email;
+            
+            res.status(200).send({
+                "success": true,
+                "message": "User email updated successfully",
+                "data": user
+            });
+
+        } catch (error) {
+            res.status(error?.statusCode || 500).send({ message: error?.message || error });
+        }
+    }
 }
 
 export default UserController;

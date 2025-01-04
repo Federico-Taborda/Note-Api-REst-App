@@ -58,6 +58,14 @@ class UserService {
             throw error;
         }
     }
+
+    static async updateUserEmail(userId, newEmail) {
+        try {
+            return await User.update({ email: newEmail }, { where: { id: userId } });
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 export default UserService;

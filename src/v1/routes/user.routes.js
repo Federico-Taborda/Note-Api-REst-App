@@ -3,6 +3,7 @@ import UserController from "../../controllers/user.controllers.js";
 import handleValidation from "../../middlewares/validationHandler.js";
 import userValidationSchema from "../../middlewares/userValidation.js";
 import userRoleValidationSchema from "../../middlewares/updateUserRoleValidation.js";
+import userEmailValidationSchema from "../../middlewares/updateUserEmailValidation.js";
 
 const userRouter = Router();
 
@@ -22,5 +23,7 @@ userRouter.post('/', userValidationSchema, handleValidation, UserController.crea
 
 // PATCH Method
 userRouter.patch('/role', userRoleValidationSchema, handleValidation, UserController.updateUserRole);
+
+userRouter.patch('/email', userEmailValidationSchema, handleValidation, UserController.updateUserEmail);
 
 export default userRouter;
