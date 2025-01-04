@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { validate } from "express-validation";
 import UserController from "../../controllers/user.controllers.js";
-import userValidation from "../../middlewares/userValidation.js";
+import handleValidation from "../../middlewares/validationHandler.js";
+import userValidationSchema from "../../middlewares/userValidation.js";
 
 const userRouter = Router();
 
@@ -15,6 +15,6 @@ userRouter.get('/name/:userName', UserController.getUserByName);
 userRouter.get('/email/:email', UserController.getUserByEmail);
 
 // POST Method
-userRouter.post('/', validate(userValidation), UserController.createUser);
+userRouter.post('/', userValidationSchema, handleValidation, UserController.createUser);
 
 export default userRouter;
