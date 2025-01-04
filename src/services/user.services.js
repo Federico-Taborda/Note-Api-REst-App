@@ -50,6 +50,14 @@ class UserService {
             throw error;
         }
     }
+
+    static async updateUserRole(userId, newRole) {
+        try {
+            return await User.update({ role: newRole }, { where: { id: userId } });
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 export default UserService;

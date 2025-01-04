@@ -27,14 +27,14 @@ class UserController {
         try {
             const users = await UserService.getAllUsers();
 
-            if(!users) {
+            if(!Array.isArray(users) || users.length === 0) {
                 return res.status(404).send({
                     "success": false,
                     "message": "No users found"
                 });
             }
 
-            res.status(302).send({
+            res.status(200).send({
                 "success": true,
                 "message": "Users retrieved successfully",
                 "data": users
@@ -56,7 +56,7 @@ class UserController {
                 });
             }
 
-            res.status(302).send({
+            res.status(200).send({
                 "success": true,
                 "message": "User retrieved successfully",
                 "data": user
@@ -78,7 +78,7 @@ class UserController {
                 });
             }
 
-            res.status(302).send({
+            res.status(200).send({
                 "success": true,
                 "message": "User retrieved successfully",
                 "data": user
@@ -100,7 +100,7 @@ class UserController {
                 });
             }
 
-            res.status(302).send({
+            res.status(200).send({
                 "success": true,
                 "message": "User retrieved successfully ",
                 "data": user
@@ -115,17 +115,58 @@ class UserController {
             const userRole = req.params.role;
             const users = await UserService.getUsersByRole(userRole);
 
-            if(!users) {
+            if(!Array.isArray(users) || users.length === 0) {
                 return res.status(404).send({
                     "success": false,
                     "message": `No users found with the specified role: ${userRole}`
                 });
             }
 
-            res.status(302).send({
+            res.status(200).send({
                 "success": true,
                 "message": "Users retrieved successfully",
                 "data": users
+            });
+        } catch (error) {
+            res.status(error?.statusCode || 500).send({ message: error?.message || error });
+        }
+    }
+
+    static async updateUserRole(req, res) {
+        try {
+            const { requestUser, updateUser, newRole } = req.body;
+            const admin = await UserService.getUserByName(requestUser);
+
+            if(!admin) {
+                return res.status(404).send({
+                    "success": false,
+                    "message": `User with name: ${requestUser} not found`
+                });
+            }
+
+            if(admin.role !== "admin") {
+                return res.status(403).send({
+                    "success": false,
+                    "message": "You are not authorized to perform this operation"
+                });
+            }
+
+            const user = await UserService.getUserByName(updateUser);
+
+            if(!user) {
+                return res.status(404).send({
+                    "success": false,
+                    "message": `User with name: ${updateUser} not found`
+                });
+            }
+
+            await UserService.updateUserRole(user.id, newRole);
+            user.role = newRole;
+
+            res.status(200).send({
+                "success": true,
+                "message": "User role updated successfully",
+                "data": user
             });
         } catch (error) {
             res.status(error?.statusCode || 500).send({ message: error?.message || error });

@@ -2,6 +2,7 @@ import { Router } from "express";
 import UserController from "../../controllers/user.controllers.js";
 import handleValidation from "../../middlewares/validationHandler.js";
 import userValidationSchema from "../../middlewares/userValidation.js";
+import userRoleValidationSchema from "../../middlewares/updateUserRoleValidation.js";
 
 const userRouter = Router();
 
@@ -18,5 +19,8 @@ userRouter.get('/role/:role', UserController.getUsersByRole);
 
 // POST Method
 userRouter.post('/', userValidationSchema, handleValidation, UserController.createUser);
+
+// PATCH Method
+userRouter.patch('/role', userRoleValidationSchema, handleValidation, UserController.updateUserRole);
 
 export default userRouter;
