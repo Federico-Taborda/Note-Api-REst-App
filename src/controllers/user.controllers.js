@@ -198,6 +198,45 @@ class UserController {
             res.status(error?.statusCode || 500).send({ message: error?.message || error });
         }
     }
+
+    static async deleteUser(req, res) {
+        try {
+            const { requestUser, deleteUser } = req.body;
+            const admin = await UserService.getUserByName(requestUser);
+            
+            if(!admin) {
+                return res.status(404).send({
+                    "success": false,
+                    "message": `User with name: ${requestUser} not found`
+                });
+            }
+
+            if(admin.role !== "admin") {
+                return res.status(403).send({
+                    "success": false,
+                    "message": "You are not authorized to perform this operation"
+                });
+            }
+            
+            const user = await UserService.getUserByName(deleteUser);
+            
+            if(!user) {
+                return res.status(404).send({
+                    "success": false,
+                    "message": `User with name: ${deleteUser} not found`
+                });
+            }
+            
+            await UserService.deleteUser(user.id);
+
+            res.status(200).send({
+                "success": true,
+                "message": `User ${user.username} deleted successfully`
+            });
+        } catch (error) {
+            
+        }
+    }
 }
 
 export default UserController;

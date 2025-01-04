@@ -66,6 +66,14 @@ class UserService {
             throw error;
         }
     }
+
+    static async deleteUser(userId) {
+        try {
+            return await User.destroy({ where: { id: userId } });
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 export default UserService;
