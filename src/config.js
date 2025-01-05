@@ -1,14 +1,12 @@
-const PORT = process.env.PORT || 3000;
-
-const DATABASE_NAME = process.env.DATABASE_NAME;
-const DATABASE_USERNAME = process.env.DATABASE_USERNAME;
-const DATABASE_PASSWORD = process.env.DATABASE_PASSWORD;
-const DATABASE_HOST = process.env.DATABASE_HOST;
-
-export {
-    PORT,
-    DATABASE_NAME,
-    DATABASE_USERNAME,
-    DATABASE_PASSWORD,
-    DATABASE_HOST
+const config = {
+    server : {
+        port: process.env.PORT || 3000
+    },
+    database : {
+        name: process.env.DATABASE_NAME,
+        username: process.env.DATABASE_USERNAME,
+        password: process.env.DATABASE_PASSWORD,
+        host: process.env.DATABASE_HOST,
+    }
 }
+export default config;

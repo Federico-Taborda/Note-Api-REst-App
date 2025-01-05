@@ -1,8 +1,10 @@
 import { Sequelize } from 'sequelize';
-import { DATABASE_NAME, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_HOST } from '../config.js';
+import config from '../config.js';
 
-const sequelize = new Sequelize(DATABASE_NAME, DATABASE_USERNAME, DATABASE_PASSWORD, {
-    host: DATABASE_HOST,
+const { database } = config;
+
+const sequelize = new Sequelize(database.name, database.username, database.password, {
+    host: database.host,
     dialect: 'postgres',
     logging: false,
 });

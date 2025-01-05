@@ -1,5 +1,5 @@
 import app from './app.js';
-import { PORT } from './config.js';
+import config from './config.js';
 import { sequelize } from './database/connection.js';
 import setupAssociations from './models/associations.js';
 
@@ -32,9 +32,9 @@ const runServer = async () => {
         await testDatabaseConnection();
         await syncronizeDatabase();
         
-        app.listen(PORT, () => console.log(`Server running in port: ${PORT}`));
+        app.listen(config.server.port, () => console.log(`Server running in port: ${config.server.port}`));
     } catch (error) {
-        console.log('Error to run server:', error);
+        console.log('Error to run server:', config.server.port);
     }
 };
 
