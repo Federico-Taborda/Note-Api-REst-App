@@ -35,6 +35,7 @@ const runServer = async () => {
         app.listen(config.server.port, () => console.log(`Server running in port: ${config.server.port}`));
     } catch (error) {
         console.log('Error to run server:', config.server.port);
+        console.log(error);
     }
 };
 
