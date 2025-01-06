@@ -1,6 +1,5 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database/connection.js';
-import User from './userModel.js';
 
 const Note = sequelize.define('Note', {
     id: {
@@ -18,18 +17,30 @@ const Note = sequelize.define('Note', {
         allowNull: false
     },
     tag: {
-        type: DataTypes.STRING,
+        type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true,
-        defaultValue: 'General'
+        defaultValue: []
     },
     priority: {
         type: DataTypes.STRING,
         allowNull: true,
         defaultValue: 'Low'
     },
-    userOwner: {
+    userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'users',
+            key: 'id',
+        }
+    },
+    visibility: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        defaultValue: 'private',
+        validate: {
+            isIn: [['public', 'private']]
+        }
     },
     state: {
         type: DataTypes.BOOLEAN,
