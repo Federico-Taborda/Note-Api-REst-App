@@ -28,11 +28,7 @@ const Note = sequelize.define('Note', {
     },
     userId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: 'users',
-            key: 'id',
-        }
+        allowNull: false
     },
     visibility: {
         type: DataTypes.STRING,
@@ -54,4 +50,3 @@ const Note = sequelize.define('Note', {
 );
 
 export default Note;
-

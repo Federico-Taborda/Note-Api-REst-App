@@ -5,15 +5,23 @@ class NoteService {
         try {
             return await Note.findAll({where: { visibility: 'public' }})
         } catch (error) {
-            
+            throw error;
         }
     }
 
-    static async getNoteById(noteId) {
+    static async getNoteById(id) {
         try {
-            
+            return await Note.findOne({where: { id }});
         } catch (error) {
-            
+            throw error;
+        }
+    }
+
+    static async getNoteByTitle(title) {
+        try {
+            return await Note.findOne({where: { title }});
+        } catch (error) {
+            throw error;
         }
     }
 
