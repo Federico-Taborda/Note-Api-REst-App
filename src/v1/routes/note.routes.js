@@ -14,6 +14,8 @@ noteRouter.get('/id/:noteId', NoteController.getNoteById);
 
 noteRouter.get('/title/:noteTitle', NoteController.getNoteByTitle);
 
+noteRouter.get('/creator/:creator', NoteController.getNotesByCreator);
+
 // POST METHOD
 noteRouter.post('/', noteValidationSchema, handleValidation, NoteController.createNote);
 

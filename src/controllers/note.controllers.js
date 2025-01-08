@@ -27,6 +27,14 @@ class NoteController {
     static async getNoteById(req, res) {
         try {
             const noteId = req.params.noteId;
+
+            if(!Number.isInteger(noteId)) {
+                return res.status(404).send({
+                    success: false,
+                    message:  `Id must be a integer no negative`
+                });
+            }
+
             const note = await NoteService.getNoteById(noteId);
             
             if(!note) {
@@ -63,6 +71,29 @@ class NoteController {
                 success: true,
                 message: 'Note retrieved successfully',
                 data: note
+            });
+        } catch (error) {
+            return res.status(error?.statusCode || 500).send({ message: error?.message || error });
+        }
+    }
+
+    static async getNotesByCreator(req, res) {
+        try {
+            const creator = req.params.creator;
+
+            const notes = await NoteService.getNotesByCreator(creator);
+        
+            if(!notes) {
+                return res.status(404).send({
+                    success: false,
+                    message: 'Notes not found'
+                });
+            }
+
+            res.status(200).send({
+                success: true,
+                message: 'Notes retrieved succesfully',
+                data: notes
             });
         } catch (error) {
             return res.status(error?.statusCode || 500).send({ message: error?.message || error });

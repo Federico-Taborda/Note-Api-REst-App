@@ -25,6 +25,14 @@ class NoteService {
         }
     }
 
+    static async getNotesByCreator(creator) {
+        try {
+            return await Note.findAll({where: { userId: creator }})
+        } catch (error) {
+            throw error;
+        }
+    }
+
     static async createNote(newNote) {
         try {
             const note = await Note.create(newNote);
