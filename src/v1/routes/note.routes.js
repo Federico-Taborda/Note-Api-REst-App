@@ -20,6 +20,7 @@ noteRouter.post('/', noteValidationSchema, handleValidation, NoteController.crea
 // PATCH METHOD
 
 // DELETE METHOD
+noteRouter.delete('/', NoteController.deleteNote);
 
 
 

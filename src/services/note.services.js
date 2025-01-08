@@ -35,6 +35,15 @@ class NoteService {
             }
         }
     }
+
+    static async deleteNote(noteId) {
+        try {
+            console.log(noteId)
+            return await Note.destroy({ where: { id: noteId } });
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 export default NoteService;

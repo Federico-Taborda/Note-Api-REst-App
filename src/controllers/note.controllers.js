@@ -1,4 +1,5 @@
 import NoteService from "../services/note.services.js";
+import UserService from "../services/user.services.js";
 
 class NoteController {
     static async getAllNotes(req, res) {
@@ -84,6 +85,38 @@ class NoteController {
                 "success": true,
                 "message": "Note created successfully",
                 "data": newNote
+            });
+        } catch (error) {
+            return res.status(error?.statusCode || 500).send({ message: error?.message || error });
+        }
+    }
+
+    static async deleteNote(req, res) {
+        try {
+            const { requestUser, noteId } = req.body;
+            console.log(requestUser, noteId)
+            const user = await UserService.getUserByName(requestUser);
+
+            if(!user) {
+                res.status(404).send({
+                    success: false,
+                    message: `User with name ${requestUser} not found`
+                });
+            }
+
+            if(user.role !== 'admin') {
+                res.status(403).send({
+                    success: false,
+                    message: `You are not authorized to perform this operation`
+                });
+            }
+
+           
+            await NoteService.deleteNote(noteId);
+
+            res.status(200).send({
+                success: true,
+                message: `Note deleted successfully`
             });
         } catch (error) {
             return res.status(error?.statusCode || 500).send({ message: error?.message || error });
