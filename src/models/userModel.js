@@ -10,7 +10,11 @@ const User = sequelize.define('User', {
     username: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true
+        unique: true,
+        validate: {
+            min: 4,
+            max: 10,
+        }
     },
     email: {
         type: DataTypes.STRING,
@@ -23,7 +27,11 @@ const User = sequelize.define('User', {
     role: {
         type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: 'user'
+        defaultValue: 'user',
+        validate: {
+            isAlpha: true,
+            isIn: [['admin', 'user']]
+        }
     }
 }, {
     timestamps: true,

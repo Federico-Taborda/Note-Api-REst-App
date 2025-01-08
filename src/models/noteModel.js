@@ -24,7 +24,11 @@ const Note = sequelize.define('Note', {
     priority: {
         type: DataTypes.STRING,
         allowNull: true,
-        defaultValue: 'Low'
+        defaultValue: 'low',
+        validate: {
+            isAlpha: true,
+            isIn: [['low', 'medium', 'high']]
+        }
     },
     userId: {
         type: DataTypes.INTEGER,
@@ -35,6 +39,7 @@ const Note = sequelize.define('Note', {
         allowNull: false,
         defaultValue: 'private',
         validate: {
+            isAlpha: true,
             isIn: [['public', 'private']]
         }
     },
