@@ -46,8 +46,15 @@ class NoteService {
 
     static async deleteNote(noteId) {
         try {
-            console.log(noteId)
             return await Note.destroy({ where: { id: noteId } });
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async updateNote(noteId, filters) {
+        try {
+            return await Note.update(filters, { where: { id: noteId } });
         } catch (error) {
             throw error;
         }

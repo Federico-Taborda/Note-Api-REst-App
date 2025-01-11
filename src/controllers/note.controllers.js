@@ -1,6 +1,9 @@
 import NoteService from "../services/note.services.js";
 import UserService from "../services/user.services.js";
 
+// Utils
+import filterParamsData from '../utils/filters.js';
+
 class NoteController {
     static async getAllNotes(req, res) {
         try {
@@ -58,7 +61,6 @@ class NoteController {
         try {
             const noteTitle = req.params.noteTitle;
             const note = await NoteService.getNoteByTitle(noteTitle);
-            console.log(note)
             
             if(!note) {
                 return res.status(404).send({
@@ -80,7 +82,6 @@ class NoteController {
     static async getNotesByCreator(req, res) {
         try {
             const creator = req.params.creator;
-
             const notes = await NoteService.getNotesByCreator(creator);
         
             if(!notes) {
@@ -142,7 +143,6 @@ class NoteController {
                 });
             }
 
-           
             await NoteService.deleteNote(noteId);
 
             res.status(200).send({
@@ -150,6 +150,32 @@ class NoteController {
                 message: `Note deleted successfully`
             });
         } catch (error) {
+            return res.status(error?.statusCode || 500).send({ message: error?.message || error });
+        }
+    }
+
+    static async updateNote(req, res) {
+        try {
+            const noteId = req.params.id;
+            const note = await NoteService.getNoteById(noteId);
+
+            if(!note) {
+                return res.status(404).send({
+                    "success": false,
+                    "message": `Note with id ${noteId} not found`
+                });
+            }
+
+            const filters = filterParamsData(req, res);
+            await NoteService.updateNote(noteId, filters);
+
+            res.status(200).send({
+                success: true,
+                message: `Note updated`,
+                data: await NoteService.getNoteById(noteId)
+            });
+        } catch (error) {
+            console.log(error)
             return res.status(error?.statusCode || 500).send({ message: error?.message || error });
         }
     }
