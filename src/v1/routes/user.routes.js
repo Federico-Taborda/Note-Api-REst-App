@@ -1,17 +1,23 @@
 import { Router } from "express";
 import UserController from "../../controllers/user.controllers.js";
+
+// Validations
+import { 
+    userValidationSchema, 
+    userRoleValidationSchema, 
+    userEmailValidationSchema, 
+    deleteUserValidationSchema 
+} from "../../middlewares/userValidation.js";
+
 import handleValidation from "../../middlewares/validationHandler.js";
-import userValidationSchema from "../../middlewares/userValidation.js";
-import userRoleValidationSchema from "../../middlewares/updateUserRoleValidation.js";
-import userEmailValidationSchema from "../../middlewares/updateUserEmailValidation.js";
-import deleteUserValidationSchema from "../../middlewares/deleteUserValidation.js";
+
 
 const userRouter = Router();
 
 // GET Method
 userRouter.get('/', UserController.getAllUsers);
 
-userRouter.get('/:userId', UserController.getUserById);
+userRouter.get('/id/:userId', UserController.getUserById);
 
 userRouter.get('/name/:userName', UserController.getUserByName);
 

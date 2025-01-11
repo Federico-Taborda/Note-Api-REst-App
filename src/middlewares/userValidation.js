@@ -28,5 +28,73 @@ const userValidationSchema = checkSchema({
     }
 });
 
-export default userValidationSchema;
+const userRoleValidationSchema = checkSchema({
+    requestUser: {
+        in: ['body'],
+        isString: true,
+        notEmpty: {
+            errorMessage: 'Request user cannot be empty'
+        },
+    },
+    updateUser: {
+        in: ['body'],
+        isString: true,
+        notEmpty: {
+            errorMessage: 'User to update cannot be empty'
+        },
+    },
+    newRole: {
+        in: ['body'],
+        isString: true,
+        notEmpty: {
+            errorMessage: 'New role cannot be empty'
+        },
+    }
+});
+
+const userEmailValidationSchema = checkSchema({
+    userName: {
+        in: ['body'],
+        notEmpty: {
+            errorMessage: 'Username cannot be empty'
+        },
+        isString: {
+            errorMessage: 'Username must be a string'
+        }
+    },
+    email: {
+        in: ['body'],
+        notEmpty: {
+            errorMessage: 'Email cannot be empty'
+        },
+        isEmail: {
+            errorMessage: 'Please provide a valid email'
+        }
+    }
+});
+
+const deleteUserValidationSchema = checkSchema({
+    requestUser: {
+        in: ['body'],
+        isString: true,
+        notEmpty: {
+            errorMessage: 'requestUser is required'
+        }
+    },
+    deleteUser: {
+        in: ['body'],
+        isString: true,
+        notEmpty: {
+            errorMessage: 'deleteUser is required'
+        }
+    }
+});
+
+
+export { 
+    userValidationSchema,
+    userRoleValidationSchema,
+    userEmailValidationSchema,
+    deleteUserValidationSchema
+ };
 
