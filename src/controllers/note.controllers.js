@@ -179,6 +179,30 @@ class NoteController {
             return res.status(error?.statusCode || 500).send({ message: error?.message || error });
         }
     }
+
+    static async getNotesByFilter(req, res) {
+        try {
+            const filters = filterParamsData(req, res);
+            filters.visibility = 'public';
+            const notes = await NoteService.getNotesByFilters(filters);
+
+            if(!notes) {
+                return res.status(404).send({
+                    "success": false,
+                    "message": `Notes not found`
+                });
+            }
+
+            res.status(200).send({
+                success: true,
+                message: `Notes retrieved successfully`,
+                data: notes
+            });
+        } catch (error) {
+            console.log(error)
+            return res.status(error?.statusCode || 500).send({ message: error?.message || error });
+        }
+    }
 }
 
 export default NoteController;

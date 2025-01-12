@@ -1,6 +1,6 @@
 import { checkSchema  } from "express-validator";
 
-const noteValidationSchema = checkSchema({
+const noteCreationValidationSchema = checkSchema({
     title: {
         in: ['body'],
         isString: true,
@@ -70,7 +70,7 @@ const noteUpdateValidationSchema = checkSchema({
         in: ['body'],
         isString: true,
         isLength: {
-            errorMessage: 'Title must be at least 5 characters long',
+            errorMessage: 'Content must be at least 5 characters long',
             options: { min: 5, max: 30}
         },
         optional: { options: { nullable: true, checkFalsy: true } }
@@ -104,8 +104,32 @@ const noteUpdateValidationSchema = checkSchema({
     }
 });
 
+const noteFilterValidationSchema = checkSchema({
+    tag: {
+        in: ['body'],
+        isArray: true,
+        optional: { options: { nullable: true, checkFalsy: true } }
+    },
+    priority: {
+        in: ['query'],
+        isString: true,
+        optional: { options: { nullable: true, checkFalsy: true } }
+    },
+    state: {
+        in: ['query'],
+        isBoolean: true,
+        optional: { options: { nullable: true, checkFalsy: true } }
+    },
+    userId: {
+        in: ['query'],
+        isNumeric: true,
+        optional: { options: { nullable: true, checkFalsy: true } }
+    }
+});
+
 export {
-    noteValidationSchema,
-    noteUpdateValidationSchema
+    noteCreationValidationSchema,
+    noteUpdateValidationSchema,
+    noteFilterValidationSchema
 }
 

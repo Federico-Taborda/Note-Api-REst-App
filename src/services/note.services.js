@@ -59,6 +59,14 @@ class NoteService {
             throw error;
         }
     }
+
+    static async getNotesByFilters(filters) {
+        try {
+            return await Note.findAll({where: filters})
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 export default NoteService;
