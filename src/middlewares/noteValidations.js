@@ -8,13 +8,17 @@ const noteCreationValidationSchema = checkSchema({
             errorMessage: 'Title cannot be empty'
         },
         isLength: {
-            errorMessage: 'Title must be at least 5 characters long',
-            options: { min: 5 }
+            errorMessage: 'Title must be at least 5 to 30 characters long',
+            options: { min: 5, max: 30 }
         }
     },
     content: {
         in: ['body'],
         isString: true,
+        isLength: {
+            errorMessage: 'Content must be at least 5 to 255 characters long',
+            options: { min: 5, max: 255}
+        },
         notEmpty: {
             errorMessage: 'Content cannot be empty'
         },
