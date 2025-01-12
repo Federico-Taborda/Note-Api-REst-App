@@ -1,5 +1,5 @@
 import app from './app.js';
-import config from './config.js';
+import config from './config/config.js';
 import { sequelize } from './database/connection.js';
 import setupAssociations from './models/associations.js';
 
