@@ -12,7 +12,7 @@ class NoteController {
             if(!Array.isArray(notes) || notes.length === 0) {
                 return res.status(400).send({
                     success: false,
-                    message: 'No notes found'
+                    message: 'Notes not found'
                 });
             }
 
@@ -23,7 +23,7 @@ class NoteController {
             });
 
         } catch (error) {
-            return res.status(error?.statusCode || 500).send({ message: error?.message || error });
+            console.log(error);
         }
     }
 
@@ -53,7 +53,7 @@ class NoteController {
                 data: note
             });
         } catch (error) {
-            return res.status(error?.statusCode || 500).send({ message: error?.message || error });
+            console.log(error);
         }
     }
 
@@ -75,7 +75,7 @@ class NoteController {
                 data: note
             });
         } catch (error) {
-            return res.status(error?.statusCode || 500).send({ message: error?.message || error });
+            console.log(error);
         }
     }
 
@@ -97,7 +97,7 @@ class NoteController {
                 data: notes
             });
         } catch (error) {
-            return res.status(error?.statusCode || 500).send({ message: error?.message || error });
+            console.log(error);
         }
     }
 
@@ -119,14 +119,13 @@ class NoteController {
                 "data": newNote
             });
         } catch (error) {
-            return res.status(error?.statusCode || 500).send({ message: error?.message || error });
+            console.log(error);
         }
     }
 
     static async deleteNote(req, res) {
         try {
             const { requestUser, noteId } = req.body;
-            console.log(requestUser, noteId)
             const user = await UserService.getUserByName(requestUser);
 
             if(!user) {
@@ -150,7 +149,7 @@ class NoteController {
                 message: `Note deleted successfully`
             });
         } catch (error) {
-            return res.status(error?.statusCode || 500).send({ message: error?.message || error });
+            console.log(error);
         }
     }
 
@@ -175,8 +174,7 @@ class NoteController {
                 data: await NoteService.getNoteById(noteId)
             });
         } catch (error) {
-            console.log(error)
-            return res.status(error?.statusCode || 500).send({ message: error?.message || error });
+            console.log(error);
         }
     }
 
@@ -199,8 +197,7 @@ class NoteController {
                 data: notes
             });
         } catch (error) {
-            console.log(error)
-            return res.status(error?.statusCode || 500).send({ message: error?.message || error });
+            console.log(error);
         }
     }
 }

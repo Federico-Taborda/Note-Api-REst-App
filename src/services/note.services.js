@@ -3,40 +3,44 @@ import Note from "../models/noteModel.js";
 class NoteService {
     static async getAllNotes() {
         try {
-            return await Note.findAll({where: { visibility: 'public' }})
+            const notes = await Note.findAll({where: { visibility: 'public' }});
+            return notes;
         } catch (error) {
-            throw error;
+            console.log(error.message);
         }
     }
 
     static async getNoteById(id) {
         try {
-            return await Note.findOne({where: { id }});
+            const note = await Note.findOne({where: { id }});
+            return note;
         } catch (error) {
-            throw error;
+            console.log(error.message);
         }
     }
 
     static async getNoteByTitle(title) {
         try {
-            return await Note.findOne({where: { title }});
+            const note = await Note.findOne({where: { title }});
+            return note;
         } catch (error) {
-            throw error;
+            console.log(error.message);
         }
     }
 
     static async getNotesByCreator(creator) {
         try {
-            return await Note.findAll({where: { userId: creator }})
+            const notes = await Note.findAll({where: { userId: creator }});
+            return notes;
         } catch (error) {
-            throw error;
+            console.log(error.message);
         }
     }
 
     static async createNote(newNote) {
         try {
             const note = await Note.create(newNote);
-            return note
+            return note;
         } catch (error) {
             if (error.name === 'SequelizeUniqueConstraintError') {
                 console.log('Error: Note has already been created.');
@@ -48,7 +52,7 @@ class NoteService {
         try {
             return await Note.destroy({ where: { id: noteId } });
         } catch (error) {
-            throw error;
+            console.log(error.message);
         }
     }
 
@@ -56,15 +60,16 @@ class NoteService {
         try {
             return await Note.update(filters, { where: { id: noteId } });
         } catch (error) {
-            throw error;
+            console.log(error.message);
         }
     }
 
     static async getNotesByFilters(filters) {
         try {
-            return await Note.findAll({where: filters})
+            const notes =  await Note.findAll({where: filters});
+            return notes;
         } catch (error) {
-            throw error;
+            console.log(error.message);
         }
     }
 }

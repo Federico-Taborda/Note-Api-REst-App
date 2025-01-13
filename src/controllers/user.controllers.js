@@ -1,17 +1,19 @@
 import UserService from "../services/user.services.js";
+import User from "../models/userModel.js";
 
 class UserController {
     static async createUser(req, res) {
         try {
-            const user = req.body;
-            const newUser = await UserService.createUser(user);
+            const user = await UserService.getUserByName(req.body.username);
 
-            if(!newUser) {
+            if(user instanceof User) {
                 return res.status(400).send({
                     "success": false,
                     "message": "User has already been created"
                 });
             }
+
+            const newUser = await UserService.createUser(req.body);
 
             return res.status(201).send({
                 "success": true,
@@ -19,7 +21,7 @@ class UserController {
                 "data": newUser
             });
         } catch (error) {
-            return res.status(error?.statusCode || 500).send({ message: error?.message || error });
+            console.log(error);
         }
     }
 
@@ -34,13 +36,13 @@ class UserController {
                 });
             }
 
-            res.status(200).send({
+            return res.status(200).send({
                 "success": true,
                 "message": "Users retrieved successfully",
                 "data": users
             });
         } catch (error) {
-            return res.status(error?.statusCode || 500).send({ message: error?.message || error });
+            console.log(error);
         }
     }
 
@@ -62,7 +64,7 @@ class UserController {
                 "data": user
             });
         }catch (error) {
-            res.status(error?.statusCode || 500).send({ message: error?.message || error });
+            console.log(error);
         }
     }
 
@@ -84,7 +86,7 @@ class UserController {
                 "data": user
             });
         } catch (error) {
-            res.status(error?.statusCode || 500).send({ message: error?.message || error });
+            console.log(error);
         }
     }
 
@@ -106,7 +108,7 @@ class UserController {
                 "data": user
             });
         } catch (error) {
-            res.status(error?.statusCode || 500).send({ message: error?.message || error });
+            console.log(error);
         }
     }
 
@@ -128,7 +130,7 @@ class UserController {
                 "data": users
             });
         } catch (error) {
-            res.status(error?.statusCode || 500).send({ message: error?.message || error });
+            console.log(error);
         }
     }
 
@@ -160,6 +162,14 @@ class UserController {
                 });
             }
 
+            if(user.role === newRole) {
+                return res.status(200).send({
+                    "success": true,
+                    "message": `User role has already been updated successfully`,
+                    "data": user
+                });
+            };
+
             await UserService.updateUserRole(user.id, newRole);
             user.role = newRole;
 
@@ -169,7 +179,7 @@ class UserController {
                 "data": user
             });
         } catch (error) {
-            res.status(error?.statusCode || 500).send({ message: error?.message || error });
+            console.log(error);
         }
     }
 
@@ -185,6 +195,14 @@ class UserController {
                 });
             }
 
+            if(user.email === email) {
+                return res.status(200).send({
+                    "success": true,
+                    "message": `User email has already been updated succesfully`,
+                    "data": user
+                });
+            }
+
             await UserService.updateUserEmail(user.id, email);
             user.email = email;
             
@@ -195,7 +213,7 @@ class UserController {
             });
 
         } catch (error) {
-            res.status(error?.statusCode || 500).send({ message: error?.message || error });
+            console.log(error);
         }
     }
 
@@ -234,7 +252,7 @@ class UserController {
                 "message": `User ${user.username} deleted successfully`
             });
         } catch (error) {
-            
+            console.log(error);
         }
     }
 }

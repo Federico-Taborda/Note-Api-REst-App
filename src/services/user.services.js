@@ -15,7 +15,7 @@ class UserService {
         try {
             return await User.findAll();
         } catch (error) {
-            throw error;
+            console.log(error.message);
         }
     }
 
@@ -23,7 +23,7 @@ class UserService {
         try {
             return await User.findByPk(id);
         }catch (error) {
-            throw error;
+            console.log(error.message);
         }
     }
 
@@ -31,7 +31,7 @@ class UserService {
         try {
             return await User.findOne({ where: { username } });
         } catch (error) {
-            throw error;
+            console.log(error.message);
         }
     }
     
@@ -39,7 +39,7 @@ class UserService {
         try {
             return await User.findOne({ where: { email } });
         } catch (error) {
-            throw error;
+            console.log(error.message);
         }
     }
 
@@ -47,7 +47,7 @@ class UserService {
         try {
             return await User.findAll({ where: { role: userRole } });
         } catch (error) {
-            throw error;
+            console.log(error.message);
         }
     }
 
@@ -55,7 +55,7 @@ class UserService {
         try {
             return await User.update({ role: newRole }, { where: { id: userId } });
         } catch (error) {
-            throw error;
+            console.log(error.message);
         }
     }
 
@@ -63,7 +63,7 @@ class UserService {
         try {
             return await User.update({ email: newEmail }, { where: { id: userId } });
         } catch (error) {
-            throw error;
+            console.log(error.message);
         }
     }
 
@@ -71,7 +71,7 @@ class UserService {
         try {
             return await User.destroy({ where: { id: userId } });
         } catch (error) {
-            throw error;
+            console.log(error.message);
         }
     }
 }
