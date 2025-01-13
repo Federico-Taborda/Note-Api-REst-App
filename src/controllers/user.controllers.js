@@ -9,6 +9,7 @@ class UserController {
             if(user instanceof User) {
                 return res.status(400).send({
                     "success": false,
+                    "status": 200,
                     "message": "User has already been created"
                 });
             }
@@ -17,6 +18,7 @@ class UserController {
 
             return res.status(201).send({
                 "success": true,
+                "status": 201,
                 "message": "User created successfully",
                 "data": newUser
             });
@@ -32,12 +34,15 @@ class UserController {
             if(!Array.isArray(users) || users.length === 0) {
                 return res.status(404).send({
                     "success": false,
-                    "message": "No users found"
+                    "status": 404,
+                    "message": "No users found",
+                    "detail": "No user has been created yet"
                 });
             }
 
             return res.status(200).send({
                 "success": true,
+                "status": 200,
                 "message": "Users retrieved successfully",
                 "data": users
             });
@@ -54,12 +59,15 @@ class UserController {
             if(!user) {
                 return res.status(404).send({
                     "success": false,
-                    "message": `User with id: ${id} not found`
+                    "status": 404,
+                    "message": "User not found",
+                    "detail": `User with id: ${id} not found`
                 });
             }
 
             res.status(200).send({
                 "success": true,
+                "status": 200,
                 "message": "User retrieved successfully",
                 "data": user
             });
@@ -76,12 +84,15 @@ class UserController {
             if(!user) {
                 return res.status(404).send({
                     "success": false,
-                    "message": `User with name: ${name} not found`,
+                    "status": 404,
+                    "message": "User not found",
+                    "detail": `User with name: ${name} not found`
                 });
             }
 
             res.status(200).send({
                 "success": true,
+                "status": 200,
                 "message": "User retrieved successfully",
                 "data": user
             });
@@ -98,12 +109,15 @@ class UserController {
             if(!user) {
                 return res.status(404).send({
                     "success": false,
-                    "message": `User with email: ${email} not found`
+                    "status": 404,
+                    "message": "User not found",
+                    "detail": `User with email: ${email} not found`
                 });
             }
 
             res.status(200).send({
                 "success": true,
+                "status": 200,
                 "message": "User retrieved successfully ",
                 "data": user
             });
@@ -120,12 +134,15 @@ class UserController {
             if(!Array.isArray(users) || users.length === 0) {
                 return res.status(404).send({
                     "success": false,
-                    "message": `No users found with the specified role: ${userRole}`
+                    "status": 404,
+                    "message": "Not users found",
+                    "detail": `No users found with the specified role: ${userRole}`
                 });
             }
 
             res.status(200).send({
                 "success": true,
+                "status": 200,
                 "message": "Users retrieved successfully",
                 "data": users
             });
@@ -142,14 +159,18 @@ class UserController {
             if(!admin) {
                 return res.status(404).send({
                     "success": false,
-                    "message": `User with name: ${requestUser} not found`
+                    "status": 404,
+                    "message": "User not found",
+                    "detail": `User with name: ${requestUser} not found`
                 });
             }
 
             if(admin.role !== "admin") {
                 return res.status(403).send({
                     "success": false,
-                    "message": "You are not authorized to perform this operation"
+                    "status": 403,
+                    "message": "Unauthorized",
+                    "detail": "You are not authorized to perform this operation"
                 });
             }
 
@@ -158,13 +179,16 @@ class UserController {
             if(!user) {
                 return res.status(404).send({
                     "success": false,
-                    "message": `User with name: ${updateUser} not found`
+                    "status": 404,
+                    "message": "User not found",
+                    "detail": `User with name: ${updateUser} not found`
                 });
             }
 
             if(user.role === newRole) {
                 return res.status(200).send({
                     "success": true,
+                    "status": 200,
                     "message": `User role has already been updated successfully`,
                     "data": user
                 });
@@ -175,6 +199,7 @@ class UserController {
 
             res.status(200).send({
                 "success": true,
+                "status": 200,
                 "message": "User role updated successfully",
                 "data": user
             });
@@ -191,13 +216,16 @@ class UserController {
             if(!user) {
                 return res.status(404).send({
                     "success": false,
-                    "message": `User with name: ${userName} not found`
+                    "status": 404,
+                    "message": "User not found",
+                    "detail": `User with name: ${userName} dosn't exists`
                 });
             }
 
             if(user.email === email) {
                 return res.status(200).send({
                     "success": true,
+                    "status": 200,
                     "message": `User email has already been updated succesfully`,
                     "data": user
                 });
@@ -208,10 +236,10 @@ class UserController {
             
             res.status(200).send({
                 "success": true,
+                "status": 200,
                 "message": "User email updated successfully",
                 "data": user
             });
-
         } catch (error) {
             console.log(error);
         }
@@ -225,14 +253,18 @@ class UserController {
             if(!admin) {
                 return res.status(404).send({
                     "success": false,
-                    "message": `User with name: ${requestUser} not found`
+                    "status": "404",
+                    "message": `Admin not found`,
+                    "detail": `The admin with name ${requestUser} dosn't exists`,
                 });
             }
 
             if(admin.role !== "admin") {
                 return res.status(403).send({
                     "success": false,
-                    "message": "You are not authorized to perform this operation"
+                    "status": 403,
+                    "message": `Unauthorized`,
+                    "detail": `You are not authorized to perform this operation`
                 });
             }
             
@@ -241,7 +273,9 @@ class UserController {
             if(!user) {
                 return res.status(404).send({
                     "success": false,
-                    "message": `User with name: ${deleteUser} not found`
+                    "status": 404,
+                    "message": `User not found`,
+                    "detail": `User with name:${deleteUser} dosn't exists`
                 });
             }
             
@@ -249,6 +283,7 @@ class UserController {
 
             res.status(200).send({
                 "success": true,
+                "status": 200,
                 "message": `User ${user.username} deleted successfully`
             });
         } catch (error) {

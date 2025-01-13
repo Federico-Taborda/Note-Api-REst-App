@@ -11,17 +11,19 @@ class NoteController {
 
             if(!Array.isArray(notes) || notes.length === 0) {
                 return res.status(400).send({
-                    success: false,
-                    message: 'Notes not found'
+                    "success": false,
+                    "status": 400,
+                    "message": 'Notes not found',
+                    "detail": "No notes created yet"
                 });
             }
 
             return res.status(200).send({
-                success: true,
-                message: "Notes retrieved successfully",
-                data: notes
+                "success": true,
+                "status": 200,
+                "message": "Notes retrieved successfully",
+                "data": notes
             });
-
         } catch (error) {
             console.log(error);
         }
@@ -33,8 +35,10 @@ class NoteController {
 
             if(!Number.isInteger(noteId)) {
                 return res.status(404).send({
-                    success: false,
-                    message:  `Id must be a integer no negative`
+                    "success": false,
+                    "status": 404,
+                    "message": "Type id error",
+                    "detail": "Id must be a integer no negative"
                 });
             }
 
@@ -42,15 +46,18 @@ class NoteController {
             
             if(!note) {
                 return res.status(404).send({
-                    success: false,
-                    message:  `Note not found with id ${noteId}`
+                    "success": false,
+                    "status": 404,
+                    "message": "Note not found",
+                    "detail": `Note not found with id ${noteId}`
                 });
             }
 
             res.status(200).send({
-                success: true,
-                message: 'Note retrieved successfully',
-                data: note
+                "success": true,
+                "status": 200,
+                "message": 'Note retrieved successfully',
+                "data": note
             });
         } catch (error) {
             console.log(error);
@@ -64,15 +71,18 @@ class NoteController {
             
             if(!note) {
                 return res.status(404).send({
-                    success: false,
-                    message:  `Note not found with title ${noteTitle}`
+                    "success": false,
+                    "status": 404,
+                    "message": "Note not found",
+                    "detail": `Note not found with title ${noteTitle}`
                 });
             }
 
             res.status(200).send({
-                success: true,
-                message: 'Note retrieved successfully',
-                data: note
+                "success": true,
+                "status": 200,
+                "message": 'Note retrieved successfully',
+                "data": note
             });
         } catch (error) {
             console.log(error);
@@ -86,15 +96,18 @@ class NoteController {
         
             if(!notes) {
                 return res.status(404).send({
-                    success: false,
-                    message: 'Notes not found'
+                    "success": false,
+                    "status": 404,
+                    "message": 'Notes not found',
+                    "detail": `No notes finded by creator: ${creator}`
                 });
             }
 
             res.status(200).send({
-                success: true,
-                message: 'Notes retrieved succesfully',
-                data: notes
+                "success": true,
+                "status": 200,
+                "message": 'Notes retrieved succesfully',
+                "data": notes
             });
         } catch (error) {
             console.log(error);
@@ -109,12 +122,15 @@ class NoteController {
             if(!newNote) {
                 return res.status(400).send({
                     "success": false,
-                    "message": "Note has already been created"
+                    "status": 404,
+                    "message": "Creation failed",
+                    "detail": "Note has already been created"
                 });
             }
 
             return res.status(201).send({
                 "success": true,
+                "status": 201,
                 "message": "Note created successfully",
                 "data": newNote
             });
@@ -130,23 +146,28 @@ class NoteController {
 
             if(!user) {
                 res.status(404).send({
-                    success: false,
-                    message: `User with name ${requestUser} not found`
+                    "success": false,
+                    "status": 404,
+                    "message": "User not found",
+                    "detail": `User with name ${requestUser} not found`
                 });
             }
 
             if(user.role !== 'admin') {
                 res.status(403).send({
-                    success: false,
-                    message: `You are not authorized to perform this operation`
+                    "success": false,
+                    "status": 403,
+                    "message": "Unauthorized",
+                    "detail": `You are not authorized to perform this operation`
                 });
             }
 
             await NoteService.deleteNote(noteId);
 
             res.status(200).send({
-                success: true,
-                message: `Note deleted successfully`
+                "success": true,
+                "status": 200,
+                "message": `Note deleted successfully`
             });
         } catch (error) {
             console.log(error);
@@ -161,7 +182,9 @@ class NoteController {
             if(!note) {
                 return res.status(404).send({
                     "success": false,
-                    "message": `Note with id ${noteId} not found`
+                    "status": 404,
+                    "message": "Note not found",
+                    "detail": `Note with id ${noteId} not found`
                 });
             }
 
@@ -169,9 +192,10 @@ class NoteController {
             await NoteService.updateNote(noteId, filters);
 
             res.status(200).send({
-                success: true,
-                message: `Note updated`,
-                data: await NoteService.getNoteById(noteId)
+                "success": true,
+                "status": 200,
+                "message": `Note updated`,
+                "data": await NoteService.getNoteById(noteId)
             });
         } catch (error) {
             console.log(error);
@@ -187,14 +211,16 @@ class NoteController {
             if(!notes) {
                 return res.status(404).send({
                     "success": false,
-                    "message": `Notes not found`
+                    "status": 404,
+                    "message": `Notes not found`,
+                    "detail": `No notes finded by filters: ${filters}`
                 });
             }
 
             res.status(200).send({
-                success: true,
-                message: `Notes retrieved successfully`,
-                data: notes
+                "success": true,
+                "message": `Notes retrieved successfully`,
+                "data": notes
             });
         } catch (error) {
             console.log(error);
