@@ -1,10 +1,19 @@
 import Note from "../models/noteModel.js";
 
 class NoteService {
-    static async getAllNotes() {
+    static async getAllNotes(limitNumber, totalOffset) {
         try {
-            const notes = await Note.findAll({where: { visibility: 'public' }});
-            return notes;
+            //const notes = await Note.findAll({where: { visibility: 'public' }});
+            //return notes;
+
+            const { count, rows } = await Note.findAndCountAll({
+                where: { visibility: 'public' },
+                offset: totalOffset,
+                limit: limitNumber,
+                order: [['id', 'ASC']]
+            });
+
+            return rows;
         } catch (error) {
             console.log(error.message);
         }

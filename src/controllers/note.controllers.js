@@ -7,9 +7,14 @@ import filterParamsData from '../utils/filters.js';
 class NoteController {
     static async getAllNotes(req, res) {
         try {
-            const notes = await NoteService.getAllNotes();
+            const { page = 1, limit = 10} = req.query;
+            const pageNumber = parseInt(page, 10);
+            const limitNumber = parseInt(limit, 10);
+            const offset = (pageNumber - 1) * limitNumber;
 
-            if(!Array.isArray(notes) || notes.length === 0) {
+            const notes = await NoteService.getAllNotes(limitNumber, offset);
+
+            if(!notes) {
                 return res.status(400).send({
                     "success": false,
                     "status": 400,
