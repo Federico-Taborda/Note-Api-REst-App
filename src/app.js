@@ -27,8 +27,7 @@ app.use(limiter)
 // Timeout
 app.use((req, res, next) => {
     req.setTimeout(5000); // Set request timeout to 5 seconds
-    res.setTimeout(5000); // Set response timeout to 5 seconds
-    res.send({ message: 'Timeout' });
+    res.setTimeout(5000)//.send({message: 'Exceeded timeout'}); // Set response timeout to 5 seconds
     next();
 });
 
@@ -46,5 +45,11 @@ app.use(express.urlencoded({extended: true}));
 // Routers
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/note', noteRouter);
+
+// Error handler
+app.use((err, req, res, next) => {
+    console.log(err)
+    return res.status(err?.statusCode || 500).send({ message: err?.message || err });
+})
 
 export default app;
