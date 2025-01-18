@@ -3,6 +3,8 @@ import UserService from "../services/user.services.js";
 
 // Utils
 import filterParamsData from '../utils/filters.js';
+import NotFoundError from "../utils/errors.js";
+import { UnauthorizedError } from "../utils/errors.js";
 
 class NoteController {
     static async getAllNotes(req, res) {
@@ -15,12 +17,7 @@ class NoteController {
             const notes = await NoteService.getAllNotes(limitNumber, offset);
 
             if(!notes) {
-                return res.status(400).send({
-                    "success": false,
-                    "status": 400,
-                    "message": 'Notes not found',
-                    "detail": "No notes created yet"
-                });
+                throw new NotFoundError('Notes not found', 'No notes created yet');
             }
 
             return res.status(200).send({
@@ -30,7 +27,7 @@ class NoteController {
                 "data": notes
             });
         } catch (error) {
-            console.log(error);
+            return res.status(error.statusCode).send(error.response);
         }
     }
 
@@ -50,22 +47,17 @@ class NoteController {
             const note = await NoteService.getNoteById(noteId);
             
             if(!note) {
-                return res.status(404).send({
-                    "success": false,
-                    "status": 404,
-                    "message": "Note not found",
-                    "detail": `Note not found with id ${noteId}`
-                });
+                throw new NotFoundError('Note not found', `Note not found with id ${noteId}`);
             }
 
-            res.status(200).send({
+            return res.status(200).send({
                 "success": true,
                 "status": 200,
                 "message": 'Note retrieved successfully',
                 "data": note
             });
         } catch (error) {
-            console.log(error);
+            return res.status(error.statusCode).send(error.response);
         }
     }
 
@@ -75,22 +67,17 @@ class NoteController {
             const note = await NoteService.getNoteByTitle(noteTitle);
             
             if(!note) {
-                return res.status(404).send({
-                    "success": false,
-                    "status": 404,
-                    "message": "Note not found",
-                    "detail": `Note not found with title ${noteTitle}`
-                });
+                throw new NotFoundError('Note not found', `Note not found with title ${noteTitle}`);
             }
 
-            res.status(200).send({
+            return res.status(200).send({
                 "success": true,
                 "status": 200,
                 "message": 'Note retrieved successfully',
                 "data": note
             });
         } catch (error) {
-            console.log(error);
+            return res.status(error.statusCode).send(error.response);
         }
     }
 
@@ -100,22 +87,17 @@ class NoteController {
             const notes = await NoteService.getNotesByCreator(creator);
         
             if(!notes) {
-                return res.status(404).send({
-                    "success": false,
-                    "status": 404,
-                    "message": 'Notes not found',
-                    "detail": `No notes finded by creator: ${creator}`
-                });
+                throw new NotFoundError('Note not found', `No notes finded by creator: ${creator}`);
             }
 
-            res.status(200).send({
+            return res.status(200).send({
                 "success": true,
                 "status": 200,
                 "message": 'Notes retrieved succesfully',
                 "data": notes
             });
         } catch (error) {
-            console.log(error);
+            return res.status(error.statusCode).send(error.response);
         }
     }
 
@@ -150,32 +132,22 @@ class NoteController {
             const user = await UserService.getUserByName(requestUser);
 
             if(!user) {
-                res.status(404).send({
-                    "success": false,
-                    "status": 404,
-                    "message": "User not found",
-                    "detail": `User with name ${requestUser} not found`
-                });
+                throw new NotFoundError('User not found', `No user finded with name ${requestUser}`);
             }
 
             if(user.role !== 'admin') {
-                res.status(403).send({
-                    "success": false,
-                    "status": 403,
-                    "message": "Unauthorized",
-                    "detail": `You are not authorized to perform this operation`
-                });
+                throw new UnauthorizedError('Unauthorized', 'You are not authorized to perform this operation');
             }
 
             await NoteService.deleteNote(noteId);
 
-            res.status(200).send({
+            return res.status(200).send({
                 "success": true,
                 "status": 200,
                 "message": `Note deleted successfully`
             });
         } catch (error) {
-            console.log(error);
+            return res.status(error.statusCode).send(error.response);
         }
     }
 
@@ -185,25 +157,20 @@ class NoteController {
             const note = await NoteService.getNoteById(noteId);
 
             if(!note) {
-                return res.status(404).send({
-                    "success": false,
-                    "status": 404,
-                    "message": "Note not found",
-                    "detail": `Note with id ${noteId} not found`
-                });
+                throw new NotFoundError('Note not found', `Note with id ${noteId} not found`);
             }
 
             const filters = filterParamsData(req, res);
             await NoteService.updateNote(noteId, filters);
 
-            res.status(200).send({
+            return res.status(200).send({
                 "success": true,
                 "status": 200,
                 "message": `Note updated`,
                 "data": await NoteService.getNoteById(noteId)
             });
         } catch (error) {
-            console.log(error);
+            return res.status(error.statusCode).send(error.response);
         }
     }
 
@@ -214,21 +181,16 @@ class NoteController {
             const notes = await NoteService.getNotesByFilters(filters);
 
             if(!notes) {
-                return res.status(404).send({
-                    "success": false,
-                    "status": 404,
-                    "message": `Notes not found`,
-                    "detail": `No notes finded by filters: ${filters}`
-                });
+                throw new NotFoundError('Notes not found', `No notes finded by filters: ${filters}`);
             }
 
-            res.status(200).send({
+            return res.status(200).send({
                 "success": true,
                 "message": `Notes retrieved successfully`,
                 "data": notes
             });
         } catch (error) {
-            console.log(error);
+            return res.status(error.statusCode).send(error.response);
         }
     }
 }

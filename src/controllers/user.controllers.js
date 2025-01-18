@@ -2,7 +2,7 @@ import UserService from "../services/user.services.js";
 import User from "../models/userModel.js";
 
 import NotFoundError from "../utils/errors.js";
-import { UnauthorizedError } from "../utils/errors.js";
+import { UnauthorizedError, TypeError } from "../utils/errors.js";
 
 class UserController {
     static async createUser(req, res) {
@@ -43,25 +43,30 @@ class UserController {
                 "data": users
             });
         } catch (error) {
-            if(error.name === "NotFoundError") return res.status(404).send(error.response);
+            return res.status(error.statusCode).send(error.response);
         }
     }
 
     static async getUserById(req, res) {
         try {
-            const id = req.params.userId;
+            let id = req.params.userId;
+            id = parseInt(id, 10)
+            console.log(!Number.isInteger(id))
+
+            if(!Number.isInteger(id)) throw new TypeError('Invalid user ID', 'User ID must be a integer');
+
             const user = await UserService.getUserById(id);
 
             if(!user) throw new NotFoundError("User not found", `User with id ${id} not found`);
             
-            res.status(200).send({
+            return res.status(200).send({
                 "success": true,
                 "status": 200,
                 "message": "User retrieved successfully",
                 "data": user
             });
         }catch (error) {
-            if(error.name === "NotFoundError") return res.status(404).send(error.response);
+            return res.status(error.statusCode).send(error.response);
         }
     }
 
@@ -72,14 +77,14 @@ class UserController {
 
             if(!user) throw new NotFoundError("User not found", `User with name ${name} not found`);
 
-            res.status(200).send({
+            return res.status(200).send({
                 "success": true,
                 "status": 200,
                 "message": "User retrieved successfully",
                 "data": user
             });
         } catch (error) {
-            if(error.name === "NotFoundError") return res.status(404).send(error.response);
+            return res.status(error.statusCode).send(error.response);
         }
     }
 
@@ -90,14 +95,14 @@ class UserController {
 
             if(!user) throw new NotFoundError("User not found", `User with email ${email} not found`);
 
-            res.status(200).send({
+            return res.status(200).send({
                 "success": true,
                 "status": 200,
                 "message": "User retrieved successfully ",
                 "data": user
             });
         } catch (error) {
-            if(error.name === "NotFoundError") return res.status(404).send(error.response);
+            return res.status(error.statusCode).send(error.response);
         }
     }
 
@@ -108,14 +113,14 @@ class UserController {
 
             if(!Array.isArray(users) || users.length === 0) throw new NotFoundError("Not users found", `No users found with the specified role ${userRole}`);
 
-            res.status(200).send({
+            return res.status(200).send({
                 "success": true,
                 "status": 200,
                 "message": "Users retrieved successfully",
                 "data": users
             });
         } catch (error) {
-            if(error.name === "NotFoundError") return res.status(404).send(error.response);
+            return res.status(error.statusCode).send(error.response);
         }
     }
 
@@ -144,19 +149,14 @@ class UserController {
             await UserService.updateUserRole(user.id, newRole);
             user.role = newRole;
 
-            res.status(200).send({
+            return res.status(200).send({
                 "success": true,
                 "status": 200,
                 "message": "User role updated successfully",
                 "data": user
             });
         } catch (error) {
-            let statusCode;
-
-            if(error.name === "NotFoundError") statusCode = 404;
-            if(error.name === "Unauthorized") statusCode = 403;
-
-            return res.status(statusCode).send(error.response);
+            return res.status(error.statusCode).send(error.response);
         }
     }
 
@@ -179,14 +179,14 @@ class UserController {
             await UserService.updateUserEmail(user.id, email);
             user.email = email;
             
-            res.status(200).send({
+            return res.status(200).send({
                 "success": true,
                 "status": 200,
                 "message": "User email updated successfully",
                 "data": user
             });
         } catch (error) {
-            if(error.name === "NotFoundError") return res.status(404).send(error.response);
+            return res.status(error.statusCode).send(error.response);
         }
     }
 
@@ -205,18 +205,13 @@ class UserController {
             
             await UserService.deleteUser(user.id);
 
-            res.status(200).send({
+            return res.status(200).send({
                 "success": true,
                 "status": 200,
                 "message": `User ${user.username} deleted successfully`
             });
         } catch (error) {
-            let statusCode;
-
-            if(error.name === "NotFoundError") statusCode = 404;
-            if(error.name === "Unauthorized") statusCode = 403;
-
-            return res.status(statusCode).send(error.response);
+            return res.status(error.statusCode).send(error.response);
         }
     }
 }
