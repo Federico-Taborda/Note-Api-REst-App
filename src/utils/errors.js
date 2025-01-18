@@ -29,3 +29,18 @@ export class UnauthorizedError extends Error {
         }
     }
 }
+
+export class TypeError extends Error {
+    constructor(message, detail) {
+        super(message);
+        this.detail = detail;
+        this.name = 'TypeError'
+        this.statusCode = httpStatusCode.BAD_REQUEST;
+        this.response = {
+            "success": false,
+            "message": this.message,
+            "detail": this.detail,
+            "status": this.statusCode
+        }
+    }
+}
