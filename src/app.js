@@ -6,6 +6,8 @@ import { rateLimit } from 'express-rate-limit';
 import userRouter from './v1/routes/user.routes.js';
 import noteRouter from './v1/routes/note.routes.js';
 
+import basicAuthentication from "./middlewares/authentication/basicAuthentication.js";
+
 // Rate-limit config
 const limiter = rateLimit({
     windowMs: 60 * 1000,
@@ -42,13 +44,15 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
+// Authentication
+//app.use(basicAuthentication);
+
 // Routers
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/note', noteRouter);
 
 // Error handler
 app.use((err, req, res, next) => {
-    console.log(err)
     return res.status(err?.statusCode || 500).send({ message: err?.message || err });
 })
 

@@ -74,6 +74,14 @@ class UserService {
             console.log(error.message);
         }
     }
+
+    static async verifyCredentials(username, email) {
+        try {
+            return await User.findOne({ where: { username, email } });
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
 }
 
 export default UserService;
