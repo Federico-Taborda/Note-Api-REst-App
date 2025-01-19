@@ -50,8 +50,7 @@ class UserController {
     static async getUserById(req, res) {
         try {
             let id = req.params.userId;
-            id = parseInt(id, 10)
-            console.log(!Number.isInteger(id))
+            id = parseInt(id, 10);
 
             if(!Number.isInteger(id)) throw new TypeError('Invalid user ID', 'User ID must be a integer');
 
