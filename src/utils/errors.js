@@ -44,3 +44,33 @@ export class TypeError extends Error {
         }
     }
 }
+
+export class ValidationError extends Error {
+    constructor(message, detail) {
+        super(message);
+        this.detail = detail;
+        this.name = 'ValidationError'
+        this.statusCode = httpStatusCode.BAD_REQUEST;
+        this.response = {
+            "success": false,
+            "message": this.message,
+            "detail": this.detail,
+            "status": this.statusCode
+        }
+    } 
+}
+
+export class InvalidTokenError extends Error {
+    constructor(message, detail) {
+        super(message);
+        this.detail = detail;
+        this.name = 'InvalidTokenError'
+        this.statusCode = httpStatusCode.FORBIDDEN;
+        this.response = {
+            "success": false,
+            "message": this.message,
+            "detail": this.detail,
+            "status": this.statusCode
+        }
+    }
+}

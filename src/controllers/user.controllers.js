@@ -1,8 +1,13 @@
 import UserService from "../services/user.services.js";
 import User from "../models/userModel.js";
 
+import jwt from "jsonwebtoken";
+import config from "../config/config.js";
+
 import NotFoundError from "../utils/errors.js";
 import { UnauthorizedError, TypeError } from "../utils/errors.js";
+
+const secret_key = config.secret_key;
 
 class UserController {
     static async createUser(req, res) {
@@ -49,8 +54,7 @@ class UserController {
 
     static async getUserById(req, res) {
         try {
-            let id = req.params.userId;
-            id = parseInt(id, 10);
+            let id = parseInt(req.params.userId, 10);
 
             if(!Number.isInteger(id)) throw new TypeError('Invalid user ID', 'User ID must be a integer');
 
@@ -211,6 +215,24 @@ class UserController {
             });
         } catch (error) {
             return res.status(error.statusCode).send(error.response);
+        }
+    }
+
+    static async loginUser(req, res) {
+        try {
+            const username = req.body.username;
+            const email = req.body.email;
+
+            const user = await UserService.verifyCredentials(username, email);
+
+            if(!user) throw new UnauthorizedError('Credentials are invalid', 'You not have authorization');
+            
+            const token = jwt.sign({username}, secret_key, {expiresIn: "1h"});
+            return res.status(200).json({token});
+
+        } catch (error) {
+            if(error.name === 'UnauthorizedError') return res.status(error.statusCode).send(error.response);
+            return res.status(401).send({message: "Authentication failed"});
         }
     }
 }

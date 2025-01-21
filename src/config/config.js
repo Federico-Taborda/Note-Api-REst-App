@@ -8,6 +8,8 @@ const config = {
         password: process.env.DATABASE_PASSWORD,
         host: process.env.DATABASE_HOST,
     },
+    secret_key: process.env.SECRET_JWT_KEY,
     enviroment: process.env.NODE_ENV
 }
+
 export default config;
