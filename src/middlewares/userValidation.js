@@ -1,11 +1,11 @@
 import { checkSchema  } from "express-validator";
 
-const userValidationSchema = checkSchema({
+const createUserValidationSchema = checkSchema({
     username: {
         in: ['body'],
         isString: true,
         notEmpty: {
-            errorMessage: 'User cannot be empty'
+            errorMessage: 'Username cannot be empty'
         },
         isLength: {
             errorMessage: 'User must be at least 3 characters long',
@@ -28,7 +28,7 @@ const userValidationSchema = checkSchema({
     }
 });
 
-const userRoleValidationSchema = checkSchema({
+const updateUserRoleValidationSchema = checkSchema({
     requestUser: {
         in: ['body'],
         isString: true,
@@ -40,7 +40,7 @@ const userRoleValidationSchema = checkSchema({
         in: ['body'],
         isString: true,
         notEmpty: {
-            errorMessage: 'User to update cannot be empty'
+            errorMessage: 'Username to update cannot be empty'
         },
     },
     newRole: {
@@ -52,7 +52,7 @@ const userRoleValidationSchema = checkSchema({
     }
 });
 
-const userEmailValidationSchema = checkSchema({
+const updateUserEmailValidationSchema = checkSchema({
     userName: {
         in: ['body'],
         notEmpty: {
@@ -90,11 +90,33 @@ const deleteUserValidationSchema = checkSchema({
     }
 });
 
+const loginUserValidationSchema = checkSchema({
+    username: {
+        in: ['body'],
+        isString: true,
+        notEmpty: {
+            errorMessage: 'Username cannot be empty'
+        },
+        isLength: {
+            errorMessage: 'Invalid username',
+            options: { min: 3 }
+        }
+    },
+    email: {
+        in: ['body'],
+        isEmail: true,
+        notEmpty: {
+            errorMessage: 'Email cannot be empty'
+        },
+    }
+})
+
 
 export { 
-    userValidationSchema,
-    userRoleValidationSchema,
-    userEmailValidationSchema,
-    deleteUserValidationSchema
+    createUserValidationSchema,
+    updateUserRoleValidationSchema,
+    updateUserEmailValidationSchema,
+    deleteUserValidationSchema,
+    loginUserValidationSchema
  };
 

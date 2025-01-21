@@ -6,13 +6,12 @@ const decondigBase64 = (credentials) => {
 }
 
 const basicAuthentication = async (req, res, next) => {
-    try {
-        const credentials = req.headers.authorization;
+    const credentials = req.headers.authorization;
 
-        if(!req.headers.authorization) throw new UnauthorizedError('Unauthorized', 'No credentials in headers');
+    try {
+        if(!credentials) throw new UnauthorizedError('Unauthorized', 'No credentials in headers');
 
         const decodedCredentials = decondigBase64(credentials);
-        console.log(decodedCredentials)
         const user = await UserService.verifyCredentials(decodedCredentials[0], decodedCredentials[1]);
         
         if(!user) throw new UnauthorizedError('Credentials are invalid', 'You not have authorization');

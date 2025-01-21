@@ -1,11 +1,14 @@
 import { validationResult } from 'express-validator';
+import { ValidationError } from '../utils/errors.js';
 
 const handleValidation = (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) throw new ValidationError('Invalid parameters', errors.array());
+        return next();
+    } catch (error) {
+        return res.status(error.statusCode).send(error.response);
     }
-    return next();
 }
 
 export default handleValidation;
