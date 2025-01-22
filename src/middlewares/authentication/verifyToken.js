@@ -5,10 +5,9 @@ import { InvalidTokenError } from '../../utils/errors.js';
 
 const verifyToken = (req, res, next) => {
     try {
-        const header = req.header("Authorization") || "";
-        const token = header.split(" ")[1];
+        const token = req.header("Authorization");
         if(!token) throw new InvalidTokenError("Token not provided", "Please provide a token");
-
+        
         const payload = jwt.verify(token, config.secret_key);
         req.username = payload.username;
         next();

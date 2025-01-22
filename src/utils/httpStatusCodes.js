@@ -4,6 +4,7 @@ const httpStatusCode = {
     UNAUTHORIZED: 403,
     NOT_FOUND: 404,
     INTERNAL_SERVER: 500,
+    FORBIDDEN: 403,
 }
 
 export default httpStatusCode;
