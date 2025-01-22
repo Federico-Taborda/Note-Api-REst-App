@@ -32,7 +32,7 @@ const runServer = async () => {
         await testDatabaseConnection();
         await syncronizeDatabase();
         
-        app.listen(config.server.port, () => console.log(`Server running in port: ${config.server.port}`));
+        app.listen(config.server.port, () => console.log(`Server running ${app.get('appName')} in port: ${config.server.port}`));
     } catch (error) {
         console.log('Error to run server:', config.server.port);
         console.log(error);

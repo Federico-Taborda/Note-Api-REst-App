@@ -7,7 +7,7 @@ import userRouter from './v1/routes/user.routes.js';
 import noteRouter from './v1/routes/note.routes.js';
 
 // Import Authentication Method
-import basicAuthentication from "./middlewares/authentication/basicAuthentication.js";
+//import basicAuthentication from "./middlewares/authentication/basicAuthentication.js";
 
 // Rate-limit config
 const limiter = rateLimit({
@@ -21,7 +21,8 @@ const limiter = rateLimit({
 // Initialize express
 const app = express();
 
-// Disable X-Powered-By
+// Settings
+app.set('appName', 'Note App');
 app.disable('x-powered-by');
 
 // Rate-limit
@@ -53,8 +54,8 @@ app.use('/api/v1/user', userRouter);
 app.use('/api/v1/note', noteRouter);
 
 // Error handler
-app.use((err, req, res) => {
-    return res.status(err?.statusCode || 500).send({ message: err?.message || err });
+app.use((err, req, res, next) => {
+    res.status(err?.statusCode || 500).send({ message: err?.message || err });
 })
 
 export default app;
