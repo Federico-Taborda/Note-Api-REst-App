@@ -7,7 +7,14 @@ import config from "../config/config.js";
 import NotFoundError from "../utils/errors.js";
 import { UnauthorizedError, TypeError } from "../utils/errors.js";
 
-const secret_key = config.secret_key;
+const sendResponse = (res, statusCode, message, data = null) => {
+    res.status(statusCode).send({
+        success: statusCode < 400,
+        status: statusCode,
+        message: message,
+        data: data || ""
+    });
+}
 
 class UserController {
     static async createUser(req, res) {
@@ -24,12 +31,7 @@ class UserController {
 
             const newUser = await UserService.createUser(req.body);
 
-            return res.status(201).send({
-                "success": true,
-                "status": 201,
-                "message": "User created successfully",
-                "data": newUser
-            });
+            return sendResponse(res, 201, "User created successfully", newUser);
         } catch (error) {
             console.log(error);
         }
@@ -41,12 +43,7 @@ class UserController {
 
             if(!Array.isArray(users) || users.length === 0) throw new NotFoundError("No users found", "No user has been created yet");
 
-            return res.status(200).send({
-                "success": true,
-                "status": 200,
-                "message": "Users retrieved successfully",
-                "data": users
-            });
+            return sendResponse(res, 200, "Users retrieved successfully", users);
         } catch (error) {
             return res.status(error.statusCode).send(error.response);
         }
@@ -62,12 +59,7 @@ class UserController {
 
             if(!user) throw new NotFoundError("User not found", `User with id ${id} not found`);
             
-            return res.status(200).send({
-                "success": true,
-                "status": 200,
-                "message": "User retrieved successfully",
-                "data": user
-            });
+            return sendResponse(res, 200, "User retrieved successfully", user);
         }catch (error) {
             return res.status(error.statusCode).send(error.response);
         }
@@ -80,12 +72,7 @@ class UserController {
 
             if(!user) throw new NotFoundError("User not found", `User with name ${name} not found`);
 
-            return res.status(200).send({
-                "success": true,
-                "status": 200,
-                "message": "User retrieved successfully",
-                "data": user
-            });
+            return sendResponse(res, 200, "User retrieved successfully", user);
         } catch (error) {
             return res.status(error.statusCode).send(error.response);
         }
@@ -98,12 +85,7 @@ class UserController {
 
             if(!user) throw new NotFoundError("User not found", `User with email ${email} not found`);
 
-            return res.status(200).send({
-                "success": true,
-                "status": 200,
-                "message": "User retrieved successfully ",
-                "data": user
-            });
+            return sendResponse(res, 200, "User retrieved successfully", user);
         } catch (error) {
             return res.status(error.statusCode).send(error.response);
         }
@@ -116,12 +98,7 @@ class UserController {
 
             if(!Array.isArray(users) || users.length === 0) throw new NotFoundError("Not users found", `No users found with the specified role ${userRole}`);
 
-            return res.status(200).send({
-                "success": true,
-                "status": 200,
-                "message": "Users retrieved successfully",
-                "data": users
-            });
+            return sendResponse(res, 200, "Users retrieved successfully", users);
         } catch (error) {
             return res.status(error.statusCode).send(error.response);
         }
@@ -141,23 +118,13 @@ class UserController {
             if(!user) throw new NotFoundError("User not found", `User with name ${updateUser} not found`);
 
             if(user.role === newRole) {
-                return res.status(200).send({
-                    "success": true,
-                    "status": 200,
-                    "message": `User role has already been updated successfully`,
-                    "data": user
-                });
+                return sendResponse(res, 200, `User role has already been updated successfully`, user);
             };
 
             await UserService.updateUserRole(user.id, newRole);
             user.role = newRole;
 
-            return res.status(200).send({
-                "success": true,
-                "status": 200,
-                "message": "User role updated successfully",
-                "data": user
-            });
+            return sendResponse(res, 200, "User role updated successfully", user);
         } catch (error) {
             return res.status(error.statusCode).send(error.response);
         }
@@ -171,23 +138,13 @@ class UserController {
             if(!user) throw new NotFoundError("User not found", `User with name: ${userName} dosn't exists`);
 
             if(user.email === email) {
-                return res.status(200).send({
-                    "success": true,
-                    "status": 200,
-                    "message": `User email has already been updated succesfully`,
-                    "data": user
-                });
+                return sendResponse(res, 200, `User email has already been updated successfully`, user);
             }
 
             await UserService.updateUserEmail(user.id, email);
             user.email = email;
             
-            return res.status(200).send({
-                "success": true,
-                "status": 200,
-                "message": "User email updated successfully",
-                "data": user
-            });
+            return sendResponse(res, 200, "User email updated successfully", user);
         } catch (error) {
             return res.status(error.statusCode).send(error.response);
         }
@@ -208,11 +165,7 @@ class UserController {
             
             await UserService.deleteUser(user.id);
 
-            return res.status(200).send({
-                "success": true,
-                "status": 200,
-                "message": `User ${user.username} deleted successfully`
-            });
+            return sendResponse(res, 200, `User ${user.username} deleted successfully`);
         } catch (error) {
             return res.status(error.statusCode).send(error.response);
         }
@@ -220,6 +173,7 @@ class UserController {
 
     static async loginUser(req, res) {
         try {
+            const secret_key = config.secret_key;
             const username = req.body.username;
             const email = req.body.email;
 
@@ -228,8 +182,7 @@ class UserController {
             if(!user) throw new UnauthorizedError('Credentials are invalid', 'You not have authorization');
             
             const token = jwt.sign({username}, secret_key, {expiresIn: "1h"});
-            return res.status(200).json({token});
-
+            return sendResponse(res, 200, "User logged in successfully", {token});
         } catch (error) {
             if(error.name === 'UnauthorizedError') return res.status(error.statusCode).send(error.response);
             return res.status(401).send({message: "Authentication failed"});

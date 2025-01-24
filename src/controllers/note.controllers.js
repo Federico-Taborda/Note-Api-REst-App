@@ -6,6 +6,15 @@ import filterParamsData from '../utils/filters.js';
 import NotFoundError from "../utils/errors.js";
 import { UnauthorizedError } from "../utils/errors.js";
 
+const sendResponse = (res, statusCode, message, data = null) => {
+    res.status(statusCode).send({
+        success: statusCode < 400,
+        status: statusCode,
+        message: message,
+        data: data || ""
+    });
+}
+
 class NoteController {
     static async getAllNotes(req, res) {
         try {
@@ -20,12 +29,7 @@ class NoteController {
                 throw new NotFoundError('Notes not found', 'No notes created yet');
             }
 
-            return res.status(200).send({
-                "success": true,
-                "status": 200,
-                "message": "Notes retrieved successfully",
-                "data": notes
-            });
+            return sendResponse(res, 200, 'Notes retrieved successfully', notes);
         } catch (error) {
             return res.status(error.statusCode).send(error.response);
         }
@@ -36,12 +40,7 @@ class NoteController {
             const noteId = req.params.noteId;
 
             if(!Number.isInteger(noteId)) {
-                return res.status(404).send({
-                    "success": false,
-                    "status": 404,
-                    "message": "Type id error",
-                    "detail": "Id must be a integer no negative"
-                });
+                return sendResponse(res, 404, 'Type id error', 'Id must be a integer no negative');
             }
 
             const note = await NoteService.getNoteById(noteId);
@@ -50,12 +49,7 @@ class NoteController {
                 throw new NotFoundError('Note not found', `Note not found with id ${noteId}`);
             }
 
-            return res.status(200).send({
-                "success": true,
-                "status": 200,
-                "message": 'Note retrieved successfully',
-                "data": note
-            });
+            return sendResponse(res, 200, 'Note retrieved successfully', note);
         } catch (error) {
             return res.status(error.statusCode).send(error.response);
         }
@@ -70,12 +64,7 @@ class NoteController {
                 throw new NotFoundError('Note not found', `Note not found with title ${noteTitle}`);
             }
 
-            return res.status(200).send({
-                "success": true,
-                "status": 200,
-                "message": 'Note retrieved successfully',
-                "data": note
-            });
+            return sendResponse(res, 200, 'Note retrieved successfully', note);
         } catch (error) {
             return res.status(error.statusCode).send(error.response);
         }
@@ -90,12 +79,7 @@ class NoteController {
                 throw new NotFoundError('Note not found', `No notes finded by creator: ${creator}`);
             }
 
-            return res.status(200).send({
-                "success": true,
-                "status": 200,
-                "message": 'Notes retrieved succesfully',
-                "data": notes
-            });
+            return sendResponse(res, 200, 'Notes retrieved successfully', notes);
         } catch (error) {
             return res.status(error.statusCode).send(error.response);
         }
@@ -107,20 +91,10 @@ class NoteController {
             const newNote = await NoteService.createNote(note);
 
             if(!newNote) {
-                return res.status(400).send({
-                    "success": false,
-                    "status": 404,
-                    "message": "Creation failed",
-                    "detail": "Note has already been created"
-                });
+                return sendResponse(res, 400, 'Creation failed', 'Note has already been created');
             }
 
-            return res.status(201).send({
-                "success": true,
-                "status": 201,
-                "message": "Note created successfully",
-                "data": newNote
-            });
+            return sendResponse(res, 201, 'Note created successfully', newNote);
         } catch (error) {
             console.log(error);
         }
@@ -141,11 +115,7 @@ class NoteController {
 
             await NoteService.deleteNote(noteId);
 
-            return res.status(200).send({
-                "success": true,
-                "status": 200,
-                "message": `Note deleted successfully`
-            });
+            return sendResponse(res, 200, 'Note deleted successfully');
         } catch (error) {
             return res.status(error.statusCode).send(error.response);
         }
@@ -162,13 +132,9 @@ class NoteController {
 
             const filters = filterParamsData(req, res);
             await NoteService.updateNote(noteId, filters);
+            const updatedNote = await NoteService.getNoteById(noteId);
 
-            return res.status(200).send({
-                "success": true,
-                "status": 200,
-                "message": `Note updated`,
-                "data": await NoteService.getNoteById(noteId)
-            });
+            return sendResponse(res, 200, 'Note updated successfully', updatedNote);
         } catch (error) {
             return res.status(error.statusCode).send(error.response);
         }
@@ -184,11 +150,7 @@ class NoteController {
                 throw new NotFoundError('Notes not found', `No notes finded by filters: ${filters}`);
             }
 
-            return res.status(200).send({
-                "success": true,
-                "message": `Notes retrieved successfully`,
-                "data": notes
-            });
+            return sendResponse(res, 200, 'Notes retrieved successfully', notes);
         } catch (error) {
             return res.status(error.statusCode).send(error.response);
         }
