@@ -65,7 +65,22 @@ export class InvalidTokenError extends Error {
         super(message);
         this.detail = detail;
         this.name = 'InvalidTokenError'
-        this.statusCode = httpStatusCode.FORBIDDEN;
+        this.statusCode = httpStatusCode.UNAUTHORIZED;
+        this.response = {
+            "success": false,
+            "message": this.message,
+            "detail": this.detail,
+            "status": this.statusCode
+        }
+    }
+}
+
+export class TokenExpiredError extends Error {
+    constructor(message, detail) {
+        super(message);
+        this.detail = detail;
+        this.name = 'TokenExpiredError'
+        this.statusCode = httpStatusCode.UNAUTHORIZED;
         this.response = {
             "success": false,
             "message": this.message,
