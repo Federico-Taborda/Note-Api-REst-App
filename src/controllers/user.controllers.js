@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import config from "../config/config.js";
 
 import NotFoundError from "../utils/errors.js";
-import { UnauthorizedError, TypeError } from "../utils/errors.js";
+import { UnauthorizedError, TypeError, InvalidCredentialsError } from "../utils/errors.js";
 
 const sendResponse = (res, statusCode, message, data = null) => {
     res.status(statusCode).send({
@@ -152,12 +152,7 @@ class UserController {
 
     static async deleteUser(req, res) {
         try {
-            const { requestUser, deleteUser } = req.body;
-            const admin = await UserService.getUserByName(requestUser);
-
-            if(!admin) throw new NotFoundError("Admin not found", `The admin with name ${requestUser} dosn't exists`);
-
-            if(admin.role !== "admin") throw new UnauthorizedError("Unauthorized", "You are not authorized to perform this operation")
+            const { deleteUser } = req.body;
             
             const user = await UserService.getUserByName(deleteUser);
             
@@ -179,7 +174,11 @@ class UserController {
 
             const user = await UserService.verifyCredentials(username, email);
 
-            if(!user) throw new UnauthorizedError('Credentials are invalid', 'You not have authorization');
+            if(!user) throw new InvalidCredentialsError('Credentials are invalid', 'Invalid username or email');
+
+            const matchEmail = user.email === email;
+
+            if(!matchEmail) throw new UnauthorizedError('Credentials are invalid', 'Invalid username or email');
             
             const token = jwt.sign({username}, secret_key, {expiresIn: "1h"});
             return sendResponse(res, 200, "User logged in successfully", {token});

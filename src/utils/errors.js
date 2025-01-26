@@ -45,6 +45,12 @@ export class InvalidTokenError extends AppError {
     }
 }
 
+export class InvalidCredentialsError extends AppError {
+    constructor(message, detail) {
+        super('InvalidCredentialsError', message, detail, httpStatusCode.UNAUTHORIZED);
+    }
+}
+
 export class TokenExpiredError extends AppError {
     constructor(message, detail) {
         super('TokenExpiredError', message, detail, httpStatusCode.UNAUTHORIZED);

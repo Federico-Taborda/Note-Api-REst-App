@@ -2,6 +2,7 @@ import { Router } from "express";
 import UserController from "../../controllers/user.controllers.js";
 
 import verifyToken from "../../middlewares/authentication/verifyToken.js";
+import verifyRole from "../../middlewares/verifyRole.js";
 
 // Validations
 import { 
@@ -38,6 +39,6 @@ userRouter.patch('/role', updateUserRoleValidationSchema, handleValidation, User
 userRouter.patch('/email', updateUserEmailValidationSchema, handleValidation, UserController.updateUserEmail);
 
 // DELETE Method
-userRouter.delete('/', deleteUserValidationSchema, handleValidation, UserController.deleteUser);
+userRouter.delete('/', deleteUserValidationSchema, handleValidation, verifyRole, UserController.deleteUser);
 
 export default userRouter;
