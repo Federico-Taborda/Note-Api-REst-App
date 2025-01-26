@@ -9,6 +9,7 @@ import noteRouter from './v1/routes/note.routes.js';
 
 import errorHandler from "./middlewares/errorHandler.js";
 import { corsConfig, limiterConfig } from "./config/appConfig.js";
+import limitPayloadSize from "./middlewares/limitPayload.js";
 
 // Import Authentication Method
 //import basicAuthentication from "./middlewares/authentication/basicAuthentication.js";
@@ -17,8 +18,9 @@ import { corsConfig, limiterConfig } from "./config/appConfig.js";
 const app = express();
 
 // Settings
-app.use(helmet());
 app.use(cors(corsConfig));
+app.use(helmet());
+app.use(limitPayloadSize);
 app.use(rateLimit(limiterConfig));
 app.set('appName', 'Note App');
 
