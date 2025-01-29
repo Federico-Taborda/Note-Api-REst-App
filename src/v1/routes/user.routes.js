@@ -4,6 +4,8 @@ import UserController from '../../controllers/user.controllers.js'
 import verifyToken from '../../middlewares/authentication/verifyToken.js'
 import verifyRole from '../../middlewares/verifyRole.js'
 
+import apicache from 'apicache'
+
 // Validations
 import {
   createUserValidationSchema,
@@ -16,9 +18,10 @@ import {
 import handleValidation from '../../middlewares/validationHandler.js'
 
 const userRouter = Router()
+const cache = apicache.middleware
 
 // GET Method
-userRouter.get('/', verifyToken, UserController.getAllUsers)
+userRouter.get('/', verifyToken, cache('5 minutes'), UserController.getAllUsers)
 
 userRouter.get('/id/:userId', verifyToken, UserController.getUserById)
 
