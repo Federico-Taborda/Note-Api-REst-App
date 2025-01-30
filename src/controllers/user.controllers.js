@@ -4,7 +4,7 @@ import User from '../models/userModel.js'
 import jwt from 'jsonwebtoken'
 import config from '../config/config.js'
 
-import { UnauthorizedError, TypeError, InvalidCredentialsError, NotFoundError } from '../utils/errors.js'
+import { AppError, UnauthorizedError, TypeError, InvalidCredentialsError, NotFoundError } from '../utils/errors.js'
 
 const sendResponse = (res, statusCode, message, data = null) => {
   res.status(statusCode).send({
@@ -21,11 +21,7 @@ class UserController {
       const user = await UserService.getUserByName(req.body.username)
 
       if (user instanceof User) {
-        return res.status(200).send({
-          success: false,
-          status: 200,
-          message: 'User has already been created'
-        })
+        return sendResponse(res, 400, 'User has already been created')
       }
 
       const newUser = await UserService.createUser(req.body)
@@ -44,7 +40,11 @@ class UserController {
 
       return sendResponse(res, 200, 'Users retrieved successfully', users)
     } catch (error) {
-      return res.status(error.statusCode).send(error.response)
+      if (error instanceof AppError) {
+        return res.status(error.statusCode).send(error.response)
+      }
+
+      console.log(error)
     }
   }
 
@@ -60,7 +60,11 @@ class UserController {
 
       return sendResponse(res, 200, 'User retrieved successfully', user)
     } catch (error) {
-      return res.status(error.statusCode).send(error.response)
+      if (error instanceof AppError) {
+        return res.status(error.statusCode).send(error.response)
+      }
+
+      console.log(error)
     }
   }
 
@@ -73,7 +77,11 @@ class UserController {
 
       return sendResponse(res, 200, 'User retrieved successfully', user)
     } catch (error) {
-      return res.status(error.statusCode).send(error.response)
+      if (error instanceof AppError) {
+        return res.status(error.statusCode).send(error.response)
+      }
+
+      console.log(error)
     }
   }
 
@@ -86,7 +94,11 @@ class UserController {
 
       return sendResponse(res, 200, 'User retrieved successfully', user)
     } catch (error) {
-      return res.status(error.statusCode).send(error.response)
+      if (error instanceof AppError) {
+        return res.status(error.statusCode).send(error.response)
+      }
+
+      console.log(error)
     }
   }
 
@@ -99,7 +111,11 @@ class UserController {
 
       return sendResponse(res, 200, 'Users retrieved successfully', users)
     } catch (error) {
-      return res.status(error.statusCode).send(error.response)
+      if (error instanceof AppError) {
+        return res.status(error.statusCode).send(error.response)
+      }
+
+      console.log(error)
     }
   }
 
@@ -125,7 +141,11 @@ class UserController {
 
       return sendResponse(res, 200, 'User role updated successfully', user)
     } catch (error) {
-      return res.status(error.statusCode).send(error.response)
+      if (error instanceof AppError) {
+        return res.status(error.statusCode).send(error.response)
+      }
+
+      console.log(error)
     }
   }
 
@@ -145,7 +165,11 @@ class UserController {
 
       return sendResponse(res, 200, 'User email updated successfully', user)
     } catch (error) {
-      return res.status(error.statusCode).send(error.response)
+      if (error instanceof AppError) {
+        return res.status(error.statusCode).send(error.response)
+      }
+
+      console.log(error)
     }
   }
 
@@ -161,7 +185,11 @@ class UserController {
 
       return sendResponse(res, 200, `User ${user.username} deleted successfully`)
     } catch (error) {
-      return res.status(error.statusCode).send(error.response)
+      if (error instanceof AppError) {
+        return res.status(error.statusCode).send(error.response)
+      }
+
+      console.log(error)
     }
   }
 
@@ -182,7 +210,11 @@ class UserController {
       const token = jwt.sign({ username }, secretKey, { expiresIn: '1h' })
       return sendResponse(res, 200, 'User logged in successfully', { token })
     } catch (error) {
-      if (error.name === 'UnauthorizedError') return res.status(error.statusCode).send(error.response)
+      if (error instanceof AppError) {
+        return res.status(error.statusCode).send(error.response)
+      }
+
+      console.log(error)
       return res.status(401).send({ message: 'Authentication failed' })
     }
   }

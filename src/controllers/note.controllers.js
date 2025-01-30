@@ -3,7 +3,7 @@ import UserService from '../services/user.services.js'
 
 // Utils
 import filterParamsData from '../utils/filters.js'
-import { NotFoundError, UnauthorizedError } from '../utils/errors.js'
+import { AppError, NotFoundError, UnauthorizedError } from '../utils/errors.js'
 
 const sendResponse = (res, statusCode, clientMessage, data = null) => {
   res.status(statusCode).send({
@@ -30,7 +30,11 @@ class NoteController {
 
       return sendResponse(res, 200, 'Notes retrieved successfully', notes)
     } catch (error) {
-      return res.status(error.statusCode).send(error.response)
+      if (error instanceof AppError) {
+        return res.status(error.statusCode).send(error.response)
+      }
+
+      console.log(error)
     }
   }
 
@@ -50,7 +54,11 @@ class NoteController {
 
       return sendResponse(res, 200, 'Note retrieved successfully', note)
     } catch (error) {
-      return res.status(error.statusCode).send(error.response)
+      if (error instanceof AppError) {
+        return res.status(error.statusCode).send(error.response)
+      }
+
+      console.log(error)
     }
   }
 
@@ -65,7 +73,11 @@ class NoteController {
 
       return sendResponse(res, 200, 'Note retrieved successfully', note)
     } catch (error) {
-      return res.status(error.statusCode).send(error.response)
+      if (error instanceof AppError) {
+        return res.status(error.statusCode).send(error.response)
+      }
+
+      console.log(error)
     }
   }
 
@@ -80,7 +92,11 @@ class NoteController {
 
       return sendResponse(res, 200, 'Notes retrieved successfully', notes)
     } catch (error) {
-      return res.status(error.statusCode).send(error.response)
+      if (error instanceof AppError) {
+        return res.status(error.statusCode).send(error.response)
+      }
+
+      console.log(error)
     }
   }
 
@@ -116,7 +132,11 @@ class NoteController {
 
       return sendResponse(res, 200, 'Note deleted successfully')
     } catch (error) {
-      return res.status(error.statusCode).send(error.response)
+      if (error instanceof AppError) {
+        return res.status(error.statusCode).send(error.response)
+      }
+
+      console.log(error)
     }
   }
 
@@ -135,7 +155,11 @@ class NoteController {
 
       return sendResponse(res, 200, 'Note updated successfully', updatedNote)
     } catch (error) {
-      return res.status(error.statusCode).send(error.response)
+      if (error instanceof AppError) {
+        return res.status(error.statusCode).send(error.response)
+      }
+
+      console.log(error)
     }
   }
 
@@ -151,7 +175,11 @@ class NoteController {
 
       return sendResponse(res, 200, 'Notes retrieved successfully', notes)
     } catch (error) {
-      return res.status(error.statusCode).send(error.response)
+      if (error instanceof AppError) {
+        return res.status(error.statusCode).send(error.response)
+      }
+
+      console.log(error)
     }
   }
 }
