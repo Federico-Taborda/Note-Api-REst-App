@@ -57,12 +57,20 @@ class TokenExpiredError extends AppError {
   }
 }
 
+class PayloadSizeError extends AppError {
+  constructor (message, detail) {
+    super('PayloadSizeError', message, detail, httpStatusCode['ENTITY-TOO-LARGE'])
+  }
+}
+
 export {
+  AppError,
   NotFoundError,
   UnauthorizedError,
   TypeError,
   ValidationError,
   InvalidTokenError,
   InvalidCredentialsError,
-  TokenExpiredError
+  TokenExpiredError,
+  PayloadSizeError
 }
